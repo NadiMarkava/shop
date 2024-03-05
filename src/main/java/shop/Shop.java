@@ -5,21 +5,13 @@ import java.util.List;
 public class Shop extends AbstractEntity{
 
     private String regNumber;
-
     private String name;
-
     private Address address;
-
     private List<Product> productList;
-
     private List<Salesman> salesmanList;
-
     private List<Customer> customerList;
-
     private List<Provider> providerList;
-
     private List<CashRegister> cashRegisterList;
-
     private List<Receipt> receiptList;
 
     public Shop(String regNumber, String name, Address address, List<Product> productList, List<Salesman> salesmanList, List<Customer> customerList, List<Provider> providerList, List<CashRegister> cashRegisterList, List<Receipt> receiptList) {
@@ -32,6 +24,22 @@ public class Shop extends AbstractEntity{
         this.providerList = providerList;
         this.cashRegisterList = cashRegisterList;
         this.receiptList = receiptList;
+    }
+
+    public void addProduct(Product product){
+        productList.add(product);
+    }
+
+    public void addCustomer(Customer customer){
+        customerList.add(customer);
+    }
+
+    public void addProvider(Provider provider){
+        providerList.add(provider);
+    }
+
+    public void addReceipt(Receipt receipt){
+        receiptList.add(receipt);
     }
 
     @Override

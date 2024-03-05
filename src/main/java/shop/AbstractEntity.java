@@ -6,8 +6,12 @@ public abstract class AbstractEntity {
 
     private int id;
 
-    public int setId() {
-        Random r = new Random( System.currentTimeMillis() );
+    public AbstractEntity() {
+        this.id = getId();
+    }
+
+    public int getId() {
+        Random r = new Random(System.currentTimeMillis());
         return 10000 + r.nextInt(20000);
     }
 }

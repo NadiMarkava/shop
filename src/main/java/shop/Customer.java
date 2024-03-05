@@ -43,7 +43,7 @@ public class Customer extends Person {
         return "Customer[" +
                 "First name=" + getFirstName() + ", " +
                 "Last name=" + getLastName() + ", " +
-                "DiscountCard=" + discountCard.setId() + ", " +
+                "DiscountCard=" + discountCard.getId() + ", " +
                 "Discount=" + discountCard.getDiscount() +
                 ']';
     }

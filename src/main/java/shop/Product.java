@@ -3,7 +3,6 @@ package shop;
 public class Product extends AbstractEntity{
 
     private String name;
-
     private double price;
 
     private ProductCategory productCategory;

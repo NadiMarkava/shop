@@ -3,7 +3,6 @@ package shop;
 public abstract class Person extends AbstractEntity{
 
     private String firstName;
-
     private String lastName;
 
     public Person(String firstName, String lastName) {
