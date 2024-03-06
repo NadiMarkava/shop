@@ -1,6 +1,6 @@
 package shop;
 
-public class DiscountCard extends AbstractEntity{
+public class DiscountCard extends AbstractEntity {
 
     private double discount;
 

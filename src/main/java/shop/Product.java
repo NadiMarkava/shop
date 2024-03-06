@@ -1,12 +1,10 @@
 package shop;
 
-public class Product extends AbstractEntity{
+public class Product extends AbstractEntity {
 
     private String name;
     private double price;
-
     private ProductCategory productCategory;
-
     private Provider provider;
 
     public Product(String name, double price, ProductCategory productCategory, Provider provider) {
@@ -82,6 +80,6 @@ public class Product extends AbstractEntity{
 
     @Override
     public String toString() {
-        return "Product [name=" + this.name + ", price=" + this.price + ", product category=" + this.productCategory.getName() + ", provider=" + provider.getName() +"]";
+        return "Product [name=" + this.name + ", price=" + this.price + ", product category=" + this.productCategory.getName() + ", provider=" + provider.getName() + "]";
     }
 }

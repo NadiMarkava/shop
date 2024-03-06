@@ -1,8 +1,14 @@
 package shop;
 
-import java.util.List;
+import interfaces.IPurchase;
+import interfaces.ISelling;
+import people.Customer;
+import people.Salesman;
 
-public class Shop extends AbstractEntity{
+import java.util.List;
+import java.util.function.Predicate;
+
+public class Shop extends AbstractEntity implements IPurchase, ISelling {
 
     private String regNumber;
     private String name;
@@ -26,19 +32,19 @@ public class Shop extends AbstractEntity{
         this.receiptList = receiptList;
     }
 
-    public void addProduct(Product product){
+    public void addProduct(Product product) {
         productList.add(product);
     }
 
-    public void addCustomer(Customer customer){
+    public void addCustomer(Customer customer) {
         customerList.add(customer);
     }
 
-    public void addProvider(Provider provider){
+    public void addProvider(Provider provider) {
         providerList.add(provider);
     }
 
-    public void addReceipt(Receipt receipt){
+    public void addReceipt(Receipt receipt) {
         receiptList.add(receipt);
     }
 
@@ -48,5 +54,18 @@ public class Shop extends AbstractEntity{
                 "Reg number=" + regNumber + ' ' +
                 ", Name=" + name + ' ' +
                 ", Address=" + address.getCity() + ", " + address.getStreet() + ", " + address.getHouse() + "]";
+    }
+
+    @Override
+    public List<Product> buy(Product product) {
+        productList.add(product);
+        return productList;
+    }
+
+    @Override
+    public List<Product> sell(Product product) {
+        Predicate<Product> condition = p -> p.getName().equals(product.getName())&& p.getPrice()==product.getPrice();
+        productList.removeIf(condition);
+        return productList;
     }
 }

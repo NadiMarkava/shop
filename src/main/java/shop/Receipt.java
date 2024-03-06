@@ -1,5 +1,8 @@
 package shop;
 
+import people.Customer;
+import people.Salesman;
+
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -7,13 +10,14 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.stream.Stream;
 
-public class Receipt extends AbstractEntity{
+public class Receipt extends AbstractEntity {
 
     private double summ;
     private String date;
     private List<Product> productList;
     private Salesman salesman;
     private Customer customer;
+    private static double summOfReceipts = 0;
 
     public Receipt(List<Product> productList, Salesman salesman, Customer customer) {
         LocalDateTime myDateObj = LocalDateTime.now();
@@ -27,6 +31,9 @@ public class Receipt extends AbstractEntity{
             summ += product.getPrice();
         }
         this.summ = summ;
+        summOfReceipts += summ;
+    }
+    public Receipt(){
     }
 
     public double getSumm() {
@@ -47,6 +54,10 @@ public class Receipt extends AbstractEntity{
 
     public Customer getCustomer() {
         return customer;
+    }
+
+    public static double getSummOfReceipts() {
+        return summOfReceipts;
     }
 
     @Override
@@ -76,6 +87,6 @@ public class Receipt extends AbstractEntity{
 
     @Override
     public String toString() {
-        return "Receipt [ " + getDate() + ", Salesman=" + getSalesman().getLastName()+ ", Customer=" + getCustomer().getLastName() + ", Products=" + getProductList().stream().flatMap(p -> Stream.of(p.getName(), p.getPrice())).collect(Collectors.toList()) + ", SUMM=" + getSumm();
+        return "Receipt [ " + getDate() + ", Salesman=" + getSalesman().getLastName() + ", Customer=" + getCustomer().getLastName() + ", Products=" + getProductList().stream().flatMap(p -> Stream.of(p.getName(), p.getPrice())).collect(Collectors.toList()) + ", SUMM=" + getSumm();
     }
 }

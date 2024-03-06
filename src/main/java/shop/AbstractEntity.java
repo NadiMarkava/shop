@@ -7,11 +7,10 @@ public abstract class AbstractEntity {
     private int id;
 
     public AbstractEntity() {
-        this.id = getId();
+        this.id = new Random(System.currentTimeMillis()).nextInt(20000);
     }
 
     public int getId() {
-        Random r = new Random(System.currentTimeMillis());
-        return 10000 + r.nextInt(20000);
+        return id;
     }
 }

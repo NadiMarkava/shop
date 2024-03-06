@@ -1,9 +1,15 @@
 package shop;
 
-public class Provider extends AbstractEntity{
+import interfaces.ISelling;
+
+import java.util.List;
+import java.util.function.Predicate;
+
+public class Provider extends AbstractEntity implements ISelling {
 
     private String name;
     private Address address;
+    private List<Product> productList;
 
     public Provider(String name) {
         this.name = name;
@@ -28,5 +34,11 @@ public class Provider extends AbstractEntity{
 
     public void setAddress(Address address) {
         this.address = address;
+    }
+
+    @Override
+    public List<Product> sell(Product product) {
+        productList.removeIf(p -> p.getName().equals(product.getName()));
+        return productList;
     }
 }

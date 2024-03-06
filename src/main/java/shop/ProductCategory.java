@@ -1,6 +1,6 @@
 package shop;
 
-public class ProductCategory extends AbstractEntity{
+public class ProductCategory extends AbstractEntity {
 
     private String name;
 

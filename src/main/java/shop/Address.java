@@ -1,6 +1,6 @@
 package shop;
 
-public class Address extends AbstractEntity{
+public class Address extends AbstractEntity {
 
     private String city;
     private String street;
