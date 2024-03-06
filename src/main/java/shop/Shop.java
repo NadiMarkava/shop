@@ -32,10 +32,6 @@ public class Shop extends AbstractEntity implements IPurchase, ISelling {
         this.receiptList = receiptList;
     }
 
-    public void addProduct(Product product) {
-        productList.add(product);
-    }
-
     public void addCustomer(Customer customer) {
         customerList.add(customer);
     }
