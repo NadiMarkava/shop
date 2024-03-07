@@ -6,5 +6,5 @@ import java.util.List;
 
 public interface ISelling {
 
-    public List<Product> sell(Product product);
+    public void sell(List<Product> products);
 }

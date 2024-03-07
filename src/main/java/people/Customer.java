@@ -1,15 +1,16 @@
 package people;
 
+import interfaces.IReturn;
 import shop.DiscountCard;
 import interfaces.IPayment;
 import interfaces.IPurchase;
 import shop.Product;
-import shop.Receipt;
+import shop.Shop;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class Customer extends Person implements IPurchase,IPayment {
+public class Customer extends Person implements IPurchase,IPayment,IReturn {
 
     private DiscountCard discountCard;
 
@@ -33,7 +34,7 @@ public class Customer extends Person implements IPurchase,IPayment {
         if (this.getLastName().equals(other.getLastName())) {
             return false;
         }
-        if (this.discountCard.getDiscount() != other.discountCard.getDiscount()) {
+        if (this.discountCard.getBalance() != other.discountCard.getBalance()) {
             return false;
         }
         return true;
@@ -53,18 +54,31 @@ public class Customer extends Person implements IPurchase,IPayment {
                 "First name=" + getFirstName() + ", " +
                 "Last name=" + getLastName() + ", " +
                 "DiscountCard=" + discountCard.getId() + ", " +
-                "Discount=" + discountCard.getDiscount() +
+                "Discount=" + discountCard.getBalance() +
                 ']';
     }
 
     @Override
-    public void pay() {
+    public void pay(double primarySumm) {
+        discountCard.setBalance(discountCard.getBalance() - primarySumm);
     }
 
     @Override
-    public List<Product> buy(Product product) {
-        List<Product> productList = new ArrayList<>();
-        productList.add(product);
+    public List<Product> buy(List<Product> productList) {
+        productList.addAll(productList);
         return productList;
+    }
+
+    @Override
+    public void returnProducts(List<Product> products) {
+        double summ = 0;
+        for (Product product : products) {
+            summ += product.getPrice();
+        }
+        discountCard.setBalance(discountCard.getBalance() + summ);
+    }
+
+    public DiscountCard getDiscountCard() {
+        return discountCard;
     }
 }

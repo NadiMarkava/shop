@@ -1,5 +1,7 @@
 package shop;
 
+import java.util.List;
+
 public class Product extends AbstractEntity {
 
     private String name;
@@ -48,6 +50,14 @@ public class Product extends AbstractEntity {
 
     public void setProviders(Provider provider) {
         this.provider = provider;
+    }
+
+    public double getSumm(List<Product> products) {
+        double summ = 0;
+        for (Product product : products) {
+            summ += product.getPrice();
+        }
+        return summ;
     }
 
     @Override

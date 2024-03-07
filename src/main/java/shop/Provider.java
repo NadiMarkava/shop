@@ -37,8 +37,6 @@ public class Provider extends AbstractEntity implements ISelling {
     }
 
     @Override
-    public List<Product> sell(Product product) {
-        productList.removeIf(p -> p.getName().equals(product.getName()));
-        return productList;
+    public void sell(List<Product> products) {
     }
 }

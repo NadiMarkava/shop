@@ -1,6 +1,8 @@
 package interfaces;
 
+import shop.Receipt;
+
 public interface IPayment {
 
-    public void pay();
+    public void pay(double primarySumm);
 }

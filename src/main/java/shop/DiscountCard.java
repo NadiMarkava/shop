@@ -2,17 +2,24 @@ package shop;
 
 public class DiscountCard extends AbstractEntity {
 
-    private double discount;
+    private double balance;
 
     public DiscountCard(double discount) {
-        this.discount = discount;
+        this.balance = discount;
     }
 
-    public double getDiscount() {
-        return discount;
+    public double getBalance() {
+        return balance;
     }
 
-    public void setDiscount(double discount) {
-        this.discount = discount;
+    public void setBalance(double balance) {
+        this.balance = balance;
+    }
+
+    @Override
+    public String toString() {
+        return "DiscountCard{" +
+                "balance=" + balance +
+                '}';
     }
 }

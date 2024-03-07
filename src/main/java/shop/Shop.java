@@ -5,6 +5,7 @@ import interfaces.ISelling;
 import people.Customer;
 import people.Salesman;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
 
@@ -31,6 +32,17 @@ public class Shop extends AbstractEntity implements IPurchase, ISelling {
         this.cashRegisterList = cashRegisterList;
         this.receiptList = receiptList;
     }
+    public Shop(){
+
+    }
+
+    public List<Product> add(Product product) {
+        if (productList == null) {
+            productList = new ArrayList<>();
+        }
+        productList.add(product);
+        return productList;
+    }
 
     public void addCustomer(Customer customer) {
         customerList.add(customer);
@@ -53,15 +65,19 @@ public class Shop extends AbstractEntity implements IPurchase, ISelling {
     }
 
     @Override
-    public List<Product> buy(Product product) {
-        productList.add(product);
+    public List<Product> buy(List<Product> products) {
+        if (productList == null) {
+            productList = new ArrayList<>();
+        }
+        productList.addAll(products);
         return productList;
     }
 
     @Override
-    public List<Product> sell(Product product) {
-        Predicate<Product> condition = p -> p.getName().equals(product.getName())&& p.getPrice()==product.getPrice();
-        productList.removeIf(condition);
+    public void sell(List<Product> products){
+    }
+
+    public List<Product> getProductList() {
         return productList;
     }
 }
