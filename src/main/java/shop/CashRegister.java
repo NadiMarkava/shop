@@ -7,6 +7,8 @@ import java.util.List;
 
 public final class CashRegister extends AbstractEntity {
 
+    private Storehouse storehouse;
+
     public double getPrimarySumm(List<Product> products){
         double summ = 0;
         for (Product product : products) {
@@ -16,6 +18,11 @@ public final class CashRegister extends AbstractEntity {
     }
 
     public Receipt saleProducts(List<Product> products, Salesman salesman, Customer customer) {
+        storehouse.getProductList().removeAll(products);
         return new Receipt(products, salesman, customer);
+    }
+
+    public void setStorehouse(Storehouse storehouse) {
+        this.storehouse = storehouse;
     }
 }

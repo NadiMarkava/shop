@@ -1,31 +1,25 @@
 package shop;
 
-import interfaces.IPurchase;
-import interfaces.ISelling;
 import people.Customer;
 import people.Salesman;
-
-import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Predicate;
 
-public class Shop extends AbstractEntity implements IPurchase, ISelling {
+public class Shop extends AbstractEntity{
 
     private String regNumber;
     private String name;
     private Address address;
-    private List<Product> productList;
+    private Storehouse storehouse;
     private List<Salesman> salesmanList;
     private List<Customer> customerList;
     private List<Provider> providerList;
     private List<CashRegister> cashRegisterList;
     private List<Receipt> receiptList;
 
-    public Shop(String regNumber, String name, Address address, List<Product> productList, List<Salesman> salesmanList, List<Customer> customerList, List<Provider> providerList, List<CashRegister> cashRegisterList, List<Receipt> receiptList) {
+    public Shop(String regNumber, String name, Address address, List<Salesman> salesmanList, List<Customer> customerList, List<Provider> providerList, List<CashRegister> cashRegisterList, List<Receipt> receiptList) {
         this.regNumber = regNumber;
         this.name = name;
         this.address = address;
-        this.productList = productList;
         this.salesmanList = salesmanList;
         this.customerList = customerList;
         this.providerList = providerList;
@@ -33,15 +27,6 @@ public class Shop extends AbstractEntity implements IPurchase, ISelling {
         this.receiptList = receiptList;
     }
     public Shop(){
-
-    }
-
-    public List<Product> add(Product product) {
-        if (productList == null) {
-            productList = new ArrayList<>();
-        }
-        productList.add(product);
-        return productList;
     }
 
     public void addCustomer(Customer customer) {
@@ -56,6 +41,10 @@ public class Shop extends AbstractEntity implements IPurchase, ISelling {
         receiptList.add(receipt);
     }
 
+    public Storehouse getStorehouse() {
+        return storehouse;
+    }
+
     @Override
     public String toString() {
         return "Shop [" +
@@ -64,20 +53,7 @@ public class Shop extends AbstractEntity implements IPurchase, ISelling {
                 ", Address=" + address.getCity() + ", " + address.getStreet() + ", " + address.getHouse() + "]";
     }
 
-    @Override
-    public List<Product> buy(List<Product> products) {
-        if (productList == null) {
-            productList = new ArrayList<>();
-        }
-        productList.addAll(products);
-        return productList;
-    }
-
-    @Override
-    public void sell(List<Product> products){
-    }
-
-    public List<Product> getProductList() {
-        return productList;
+    public void setStorehouse(Storehouse storehouse) {
+        this.storehouse = storehouse;
     }
 }

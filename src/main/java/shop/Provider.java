@@ -36,7 +36,12 @@ public class Provider extends AbstractEntity implements ISelling {
         this.address = address;
     }
 
+    public void setProductList(List<Product> productList) {
+        this.productList = productList;
+    }
+
     @Override
     public void sell(List<Product> products) {
+        productList.removeAll(products);
     }
 }

@@ -52,14 +52,6 @@ public class Product extends AbstractEntity {
         this.provider = provider;
     }
 
-    public double getSumm(List<Product> products) {
-        double summ = 0;
-        for (Product product : products) {
-            summ += product.getPrice();
-        }
-        return summ;
-    }
-
     @Override
     public boolean equals(Object obj) {
         if (obj == null) {

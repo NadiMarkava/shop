@@ -1,8 +1,9 @@
 package people;
 
+import interfaces.ISaying;
 import people.Person;
 
-public class Salesman extends Person {
+public class Salesman extends Person implements ISaying {
 
     private double salary;
 
@@ -17,5 +18,10 @@ public class Salesman extends Person {
 
     public void setSalary(double salary) {
         this.salary = salary;
+    }
+
+    @Override
+    public void say() {
+        System.out.println("Hello dear!");
     }
 }
