@@ -1,36 +1,38 @@
 package shop;
 
-import interfaces.IPurchase;
-import interfaces.IReturn;
-import interfaces.ISelling;
-
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
-public class Storehouse implements IPurchase, ISelling, IReturn {
+public class Storehouse {
 
-    private List<Product> productList;
+    private Map<Product, Integer> availableProducts;
 
-    public List<Product> getProductList() {
-        return productList;
+    public void removeProduct(Product product) {
+
     }
 
-    public void setProductList(List<Product> productList) {
-        this.productList = productList;
+    public void removeProducts(List<Product> products) {
+        for (Product product:products){
+            availableProducts.remove(product, 1);
+        }
     }
 
-    @Override
-    public List<Product> buy(List<Product> products) {
-        productList.addAll(products);
-        return productList;
-    }
-
-    @Override
-    public void sell(List<Product> products){
-        productList.removeAll(products);
+    public void addProduct(Product product) {
+            availableProducts.merge(product, 1, Integer::sum);
     }
 
     @Override
-    public void returnProducts(List<Product> products) {
-        productList.addAll(products);
+    public String toString() {
+        return "Storehouse{" +
+                "availableProducts=" +availableProducts +
+                '}';
+    }
+
+    public void setAvailableProducts(Map<Product, Integer> availableProducts) {
+        this.availableProducts = availableProducts;
     }
 }
+

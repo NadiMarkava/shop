@@ -82,6 +82,6 @@ public class Product extends AbstractEntity {
 
     @Override
     public String toString() {
-        return "Product [name=" + this.name + ", price=" + this.price + ", product category=" + this.productCategory.getName() + ", provider=" + provider.getName() + "]";
+        return "Product [name=" + this.name + ", price=" + this.price + ", product category=" + this.productCategory.getName() + "]";
     }
 }

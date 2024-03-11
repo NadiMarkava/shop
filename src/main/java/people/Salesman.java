@@ -1,9 +1,8 @@
 package people;
 
-import interfaces.ISaying;
-import people.Person;
+import interfaces.ISpeak;
 
-public class Salesman extends Person implements ISaying {
+public class Salesman extends Person implements ISpeak {
 
     private double salary;
 
@@ -21,7 +20,7 @@ public class Salesman extends Person implements ISaying {
     }
 
     @Override
-    public void say() {
-        System.out.println("Hello dear!");
+    public void say(String message) {
+        System.out.println(message);
     }
 }

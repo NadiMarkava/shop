@@ -1,34 +1,56 @@
 package people;
 
 import interfaces.IReturn;
-import interfaces.ISaying;
+import interfaces.ISpeak;
 import shop.DiscountCard;
 import interfaces.IPayment;
-import interfaces.IPurchase;
 import shop.Product;
-import shop.Shop;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
-public class Customer extends Person implements IPurchase,IPayment,IReturn,ISaying {
+public class Customer extends Person implements IPayment, ISpeak, IReturn {
 
     private DiscountCard discountCard;
 
-    private List<Product> wishList;
+    private List<Product> productsToBuy;
 
-    public Customer(String firstName, String lastName, DiscountCard discountCard) {
+    public Customer(String firstName, String lastName) {
         super(firstName, lastName);
-        this.discountCard = discountCard;
     }
 
-    public void setWishList(List<Product> wishList) {
-        this.wishList = wishList;
+    public List<Product>  takeProduct(Product product) {
+        productsToBuy.add(product);
+        return productsToBuy;
     }
+
+    public List<Product> takeProducts(List<Product> products) {
+        productsToBuy.addAll(products);
+        return productsToBuy;
+    }
+
 
     public DiscountCard getDiscountCard() {
         return discountCard;
+    }
+
+    public List<Product> getProductsToBuy() {
+        return productsToBuy;
+    }
+
+    public boolean hasDiscountCard() {
+        if (discountCard != null) {
+            return true;
+        }
+        return false;
+    }
+
+
+    public void setProductsToBuy(List<Product> productsToBuy) {
+        this.productsToBuy = productsToBuy;
+    }
+
+    public void setDiscountCard(DiscountCard discountCard) {
+        this.discountCard = discountCard;
     }
 
     @Override
@@ -46,41 +68,20 @@ public class Customer extends Person implements IPurchase,IPayment,IReturn,ISayi
         if (this.getLastName().equals(other.getLastName())) {
             return false;
         }
-        if (this.discountCard.getBalance() != other.discountCard.getBalance()) {
+        if (this.discountCard.getDiscount() != other.discountCard.getDiscount()) {
             return false;
         }
         return true;
     }
 
     @Override
-    public void say() {
-        System.out.println("Good morning!");
+    public void say(String message) {
+        System.out.println(message);
     }
 
     @Override
-    public void pay(double primarySumm) {
-        discountCard.setBalance(discountCard.getBalance() - primarySumm);
-    }
-
-    @Override
-    public List<Product> buy(List<Product> shopProducts) {
-        List<Product> toBuyList = new ArrayList<>();
-        List<String> shopProductsNames = shopProducts.stream().map(p -> p.getName()).collect(Collectors.toList());
-        for (Product product : wishList) {
-            if (shopProductsNames.contains(product.getName())) {
-                toBuyList.add(product);
-            }
-        }
-        return toBuyList;
-    }
-
-    @Override
-    public void returnProducts(List<Product> products) {
-        double summ = 0;
-        for (Product product : products) {
-            summ += product.getPrice();
-        }
-        discountCard.setBalance(discountCard.getBalance() + summ);
+    public void pay(double summ) {
+        System.out.println("----Paid------" + summ);
     }
 
     @Override
@@ -97,7 +98,12 @@ public class Customer extends Person implements IPurchase,IPayment,IReturn,ISayi
                 "First name=" + getFirstName() + ", " +
                 "Last name=" + getLastName() + ", " +
                 "DiscountCard=" + discountCard.getId() + ", " +
-                "Discount=" + discountCard.getBalance() +
+                "Discount=" + discountCard.getDiscount() +
                 ']';
+    }
+
+    @Override
+    public void returnProducts(List<Product> products) {
+        System.out.println("----Paid------");
     }
 }

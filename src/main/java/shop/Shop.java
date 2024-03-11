@@ -13,20 +13,43 @@ public class Shop extends AbstractEntity{
     private List<Salesman> salesmanList;
     private List<Customer> customerList;
     private List<Provider> providerList;
+    private CashRegister cashRegister;
     private List<CashRegister> cashRegisterList;
     private List<Receipt> receiptList;
 
-    public Shop(String regNumber, String name, Address address, List<Salesman> salesmanList, List<Customer> customerList, List<Provider> providerList, List<CashRegister> cashRegisterList, List<Receipt> receiptList) {
-        this.regNumber = regNumber;
-        this.name = name;
-        this.address = address;
-        this.salesmanList = salesmanList;
-        this.customerList = customerList;
-        this.providerList = providerList;
-        this.cashRegisterList = cashRegisterList;
-        this.receiptList = receiptList;
-    }
     public Shop(){
+    }
+
+    public void createDiscountCard(Customer customer, double discount){
+        DiscountCard discountCard = new DiscountCard(discount);
+        customer.setDiscountCard(discountCard);
+    }
+
+    public Receipt getReceipt(Customer customer){
+        CashRegister cashRegister = getAvailableCashRegister();
+        cashRegister.setBusy(true);
+        Receipt receipt = cashRegister.sellProducts(customer);
+        addReceipt(receipt);
+        cashRegister.setBusy(false);
+        storehouse.removeProducts(customer.getProductsToBuy());
+//        returnItemsFromCustomer(receipt);
+        return receipt;
+    }
+
+    public CashRegister getAvailableCashRegister() {
+        for (int i = 0; i < cashRegisterList.size(); i++) {
+            if (!cashRegisterList.get(i).isBusy()) {
+                return cashRegisterList.get(i);
+            }
+        }
+        throw new UnsupportedOperationException("No available cash registers");
+    }
+
+    public void returnItemsFromCustomer(Receipt receipt) {
+        List<Product> products = receipt.getProductList();
+        for(int i =0; i<products.size(); i++) {
+            getStorehouse().addProduct(products.get(i));
+        }
     }
 
     public void addCustomer(Customer customer) {
@@ -55,5 +78,13 @@ public class Shop extends AbstractEntity{
 
     public void setStorehouse(Storehouse storehouse) {
         this.storehouse = storehouse;
+    }
+
+    public void setCashRegisterList(List<CashRegister> cashRegisterList) {
+        this.cashRegisterList = cashRegisterList;
+    }
+
+    public void setReceiptList(List<Receipt> receiptList) {
+        this.receiptList = receiptList;
     }
 }

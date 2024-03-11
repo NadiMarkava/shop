@@ -4,5 +4,5 @@ import shop.Receipt;
 
 public interface IPayment {
 
-    public void pay(double primarySumm);
+    public void pay(double summ);
 }
