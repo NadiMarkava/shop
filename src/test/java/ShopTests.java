@@ -30,10 +30,10 @@ public class ShopTests {
         availableProducts.put(product, count);
         storehouse.setAvailableProducts(availableProducts);
         System.out.println("Available Products" + availableProducts);
-        storehouse.addProduct(productB);
-        storehouse.addProduct(productB);
-        storehouse.addProduct(product);
-        storehouse.addProduct(product);
+        storehouse.addProduct(productB,1);
+        storehouse.addProduct(productB,1);
+        storehouse.addProduct(product, 1);
+        storehouse.addProduct(product, 1);
 
         System.out.println("Available Products" + availableProducts);
 

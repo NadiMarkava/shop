@@ -7,8 +7,8 @@ public class Storehouse {
 
     private Map<Product, Integer> availableProducts;
 
-    public void removeProduct(Product product) {
-
+    public void removeProduct(Product product, int count) {
+        availableProducts.put(product, availableProducts.get(product) - count);
     }
 
     public void removeProducts(List<Product> products) {
@@ -17,8 +17,8 @@ public class Storehouse {
         }
     }
 
-    public void addProduct(Product product) {
-        availableProducts.merge(product, 1, Integer::sum);
+    public void addProduct(Product product, int count) {
+        availableProducts.merge(product, count, Integer::sum);
     }
 
     public void setAvailableProducts(Map<Product, Integer> availableProducts) {

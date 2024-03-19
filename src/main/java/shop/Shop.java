@@ -80,7 +80,7 @@ public class Shop extends AbstractEntity implements ISelling, IReturn, IClose {
     public void returnProducts(Receipt receipt) {
         List<Product> products = receipt.getProductList();
         for(int i =0; i<products.size(); i++) {
-            getStorehouse().addProduct(products.get(i));
+            getStorehouse().addProduct(products.get(i), 1);
         }
     }
 
