@@ -8,24 +8,25 @@ import shop.Product;
 import shop.Receipt;
 
 import java.util.List;
+import java.util.Map;
 
 public class Customer extends Person implements IPayment, ISpeak, IReturn {
 
     private DiscountCard discountCard;
 
-    private List<Product> productsToBuy;
+    private Map<Product, Integer> productsToBuy;
 
     public Customer(String firstName, String lastName) {
         super(firstName, lastName);
     }
 
-    public List<Product> takeProduct(Product product) {
-        productsToBuy.add(product);
+    public Map<Product, Integer> takeProduct(Product product, int count) {
+        productsToBuy.put(product, count);
         return productsToBuy;
     }
 
-    public List<Product> takeProducts(List<Product> products) {
-        productsToBuy.addAll(products);
+    public Map<Product, Integer> takeProducts(Map<Product, Integer> products) {
+        productsToBuy.putAll(products);
         return productsToBuy;
     }
 
@@ -33,11 +34,11 @@ public class Customer extends Person implements IPayment, ISpeak, IReturn {
         return discountCard;
     }
 
-    public List<Product> getProductsToBuy() {
+    public Map<Product, Integer> getProductsToBuy() {
         return productsToBuy;
     }
 
-    public void setProductsToBuy(List<Product> productsToBuy) {
+    public void setProductsToBuy(Map<Product, Integer> productsToBuy) {
         this.productsToBuy = productsToBuy;
     }
 

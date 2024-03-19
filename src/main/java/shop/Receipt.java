@@ -4,6 +4,7 @@ import people.Customer;
 import people.Salesman;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import java.time.LocalDateTime;
@@ -14,11 +15,11 @@ public class Receipt extends AbstractEntity {
 
     private double summ;
     private String date;
-    private List<Product> productList;
+    private Map<Product, Integer> productList;
     private Salesman salesman;
     private Customer customer;
 
-    public Receipt(List<Product> productList, Salesman salesman, Customer customer) {
+    public Receipt(Map<Product, Integer> productList, Salesman salesman, Customer customer) {
         LocalDateTime myDateObj = LocalDateTime.now();
         DateTimeFormatter myFormatObj = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
         this.date = myDateObj.format(myFormatObj);
@@ -26,7 +27,7 @@ public class Receipt extends AbstractEntity {
         this.salesman = salesman;
         this.customer = customer;
         double summ = 0;
-        for (Product product : productList) {
+        for (Product product : productList.keySet()) {
             summ += product.getPrice();
         }
         this.summ = summ;
@@ -42,7 +43,7 @@ public class Receipt extends AbstractEntity {
         return date;
     }
 
-    public List<Product> getProductList() {
+    public Map<Product, Integer> getProductList() {
         return productList;
     }
 
@@ -81,6 +82,6 @@ public class Receipt extends AbstractEntity {
 
     @Override
     public String toString() {
-        return "Receipt [ " + getDate() + ", Salesman=" + getSalesman().getLastName() + ", Customer=" + getCustomer().getLastName() + ", Products=" + getProductList().stream().flatMap(p -> Stream.of(p.getName(), p.getPrice())).collect(Collectors.toList()) + ", SUMM=" + getSumm();
+        return "Receipt [ " + getDate() + ", Salesman=" + getSalesman().getLastName() + ", Customer=" + getCustomer().getLastName() + ", Products=" + getProductList().keySet().stream().flatMap(p -> Stream.of(p.getName(), p.getPrice())).collect(Collectors.toList()) + ", SUMM=" + getSumm();
     }
 }

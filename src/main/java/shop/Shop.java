@@ -6,6 +6,7 @@ import interfaces.ISelling;
 import people.Customer;
 import people.Salesman;
 import java.util.List;
+import java.util.Map;
 
 public class Shop extends AbstractEntity implements ISelling, IReturn, IClose {
 
@@ -78,9 +79,9 @@ public class Shop extends AbstractEntity implements ISelling, IReturn, IClose {
 
     @Override
     public void returnProducts(Receipt receipt) {
-        List<Product> products = receipt.getProductList();
-        for(int i =0; i<products.size(); i++) {
-            getStorehouse().addProduct(products.get(i), 1);
+        Map<Product, Integer> products = receipt.getProductList();
+        for (Product product : products.keySet()) {
+            getStorehouse().addProduct(product,  products.get(product));
         }
     }
 

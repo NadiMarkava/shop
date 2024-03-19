@@ -6,6 +6,7 @@ import people.Customer;
 import people.Salesman;
 
 import java.util.List;
+import java.util.Map;
 
 public final class CashRegister extends AbstractEntity implements ISelling, IClose {
 
@@ -17,10 +18,10 @@ public final class CashRegister extends AbstractEntity implements ISelling, IClo
         this.salesman = salesman;
     }
 
-    public double calculateSumm(List<Product> products){
+    public double calculateSumm(Map<Product, Integer> products){
         double summ = 0;
-        for (Product product : products) {
-            summ += product.getPrice();
+        for (Product product : products.keySet()) {
+            summ += product.getPrice() * products.get(product);
         }
         return summ;
     }

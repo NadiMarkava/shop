@@ -11,9 +11,9 @@ public class Storehouse {
         availableProducts.put(product, availableProducts.get(product) - count);
     }
 
-    public void removeProducts(List<Product> products) {
-        for (Product product : products) {
-            availableProducts.put(product, availableProducts.get(product) - 1);
+    public void removeProducts(Map<Product, Integer> products) {
+        for (Product product : products.keySet()) {
+            availableProducts.put(product, availableProducts.get(product) - products.get(product));
         }
     }
 
@@ -30,6 +30,10 @@ public class Storehouse {
         return "Storehouse{" +
                 "availableProducts=" + availableProducts +
                 '}';
+    }
+
+    public Map<Product, Integer> getAvailableProducts() {
+        return availableProducts;
     }
 }
 

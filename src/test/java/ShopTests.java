@@ -16,7 +16,6 @@ public class ShopTests {
 
         Product product = new Product("Yogurt", 3.45, new ProductCategory("Milk Products"), new Provider("Sofiika"));
         Product productB = new Product("Ice cream", 1.45, new ProductCategory("Milk Products"), new Provider("Miskays marka"));
-        int count = 20;
         Salesman salesman = new Salesman("John", "Obermaier", 450);
         Salesman salesman1 = new Salesman("Sepp", "Herrmann", 450);
 
@@ -27,23 +26,22 @@ public class ShopTests {
 
 
         Map<Product, Integer> availableProducts = new HashMap<>();
-        availableProducts.put(product, count);
         storehouse.setAvailableProducts(availableProducts);
         System.out.println("Available Products" + availableProducts);
+        storehouse.addProduct(productB,6);
         storehouse.addProduct(productB,1);
-        storehouse.addProduct(productB,1);
-        storehouse.addProduct(product, 1);
+        storehouse.addProduct(product, 6);
         storehouse.addProduct(product, 1);
 
         System.out.println("Available Products" + availableProducts);
 
 
-        List<Product> productsToBuy = new ArrayList<>();
+        Map<Product, Integer> productsToBuy = new HashMap<>();
         customer.setProductsToBuy(productsToBuy);
-        productsToBuy = customer.takeProduct(product);
-        customer.takeProduct(productB);
+        productsToBuy = customer.takeProduct(product, 2);
+        customer.takeProduct(productB, 2);
         System.out.println("Products to buy" + productsToBuy);
-//        shop.createDiscountCard(customer, 5);
+        shop.createDiscountCard(customer, 5);
         List<CashRegister> cashRegisterList = new ArrayList<>();
         List<Receipt> receiptList = new ArrayList<>();
         CashRegister cashRegister = new CashRegister(salesman);
@@ -53,10 +51,8 @@ public class ShopTests {
         shop.setCashRegisterList(cashRegisterList);
         shop.setReceiptList(receiptList);
         cashRegister.setBusy(true);
-//        cashRegister1.setBusy(true);
         Receipt receipt = shop.sell(customer);
         System.out.println("Receipt" + receipt.toString());
-//        cashRegister.sell(customer);
 
         System.out.println("Available Products after selling" + availableProducts);
         shop.returnProducts(receipt);
