@@ -9,7 +9,7 @@ import java.util.List;
 
 public class Shop extends AbstractEntity implements ISelling, IReturn, IClose {
 
-    private final String REGNUMBER = "5384255";
+    private static final String REGNUMBER = "5384255";
     private String name;
     private Address address;
     private Storehouse storehouse;
