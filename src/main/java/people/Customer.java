@@ -5,6 +5,7 @@ import interfaces.ISpeak;
 import shop.DiscountCard;
 import interfaces.IPayment;
 import shop.Product;
+import shop.Receipt;
 
 import java.util.List;
 
@@ -18,7 +19,7 @@ public class Customer extends Person implements IPayment, ISpeak, IReturn {
         super(firstName, lastName);
     }
 
-    public List<Product>  takeProduct(Product product) {
+    public List<Product> takeProduct(Product product) {
         productsToBuy.add(product);
         return productsToBuy;
     }
@@ -28,13 +29,16 @@ public class Customer extends Person implements IPayment, ISpeak, IReturn {
         return productsToBuy;
     }
 
-
     public DiscountCard getDiscountCard() {
         return discountCard;
     }
 
     public List<Product> getProductsToBuy() {
         return productsToBuy;
+    }
+
+    public void setProductsToBuy(List<Product> productsToBuy) {
+        this.productsToBuy = productsToBuy;
     }
 
     public boolean hasDiscountCard() {
@@ -44,13 +48,31 @@ public class Customer extends Person implements IPayment, ISpeak, IReturn {
         return false;
     }
 
-
-    public void setProductsToBuy(List<Product> productsToBuy) {
-        this.productsToBuy = productsToBuy;
-    }
-
     public void setDiscountCard(DiscountCard discountCard) {
         this.discountCard = discountCard;
+    }
+
+    @Override
+    public void say(String message) {
+        System.out.println(message);
+    }
+
+    @Override
+    public void pay(double summ) {
+        System.out.println("----Paid------" + summ);
+    }
+
+    @Override
+    public void returnProducts(Receipt receipt) {
+        System.out.println("----Refund------");
+    }
+
+    @Override
+    public int hashCode() {
+        int result = 0;
+        result = 31 * result + (getFirstName() != null ? getFirstName().hashCode() : 0);
+        result = 31 * result + (getLastName() != null ? getLastName().hashCode() : 0);
+        return result;
     }
 
     @Override
@@ -75,24 +97,6 @@ public class Customer extends Person implements IPayment, ISpeak, IReturn {
     }
 
     @Override
-    public void say(String message) {
-        System.out.println(message);
-    }
-
-    @Override
-    public void pay(double summ) {
-        System.out.println("----Paid------" + summ);
-    }
-
-    @Override
-    public int hashCode() {
-        int result = 0;
-        result = 31 * result + (getFirstName() != null ? getFirstName().hashCode() : 0);
-        result = 31 * result + (getLastName() != null ? getLastName().hashCode() : 0);
-        return result;
-    }
-
-    @Override
     public String toString() {
         return "Customer[" +
                 "First name=" + getFirstName() + ", " +
@@ -100,10 +104,5 @@ public class Customer extends Person implements IPayment, ISpeak, IReturn {
                 "DiscountCard=" + discountCard.getId() + ", " +
                 "Discount=" + discountCard.getDiscount() +
                 ']';
-    }
-
-    @Override
-    public void returnProducts(List<Product> products) {
-        System.out.println("----Paid------");
     }
 }

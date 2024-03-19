@@ -1,10 +1,7 @@
 package shop;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 public class Storehouse {
 
@@ -15,24 +12,24 @@ public class Storehouse {
     }
 
     public void removeProducts(List<Product> products) {
-        for (Product product:products){
-            availableProducts.remove(product, 1);
+        for (Product product : products) {
+            availableProducts.put(product, availableProducts.get(product) - 1);
         }
     }
 
     public void addProduct(Product product) {
-            availableProducts.merge(product, 1, Integer::sum);
+        availableProducts.merge(product, 1, Integer::sum);
+    }
+
+    public void setAvailableProducts(Map<Product, Integer> availableProducts) {
+        this.availableProducts = availableProducts;
     }
 
     @Override
     public String toString() {
         return "Storehouse{" +
-                "availableProducts=" +availableProducts +
+                "availableProducts=" + availableProducts +
                 '}';
-    }
-
-    public void setAvailableProducts(Map<Product, Integer> availableProducts) {
-        this.availableProducts = availableProducts;
     }
 }
 

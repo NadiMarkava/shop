@@ -2,10 +2,11 @@ package interfaces;
 
 import shop.DiscountCard;
 import shop.Product;
+import shop.Receipt;
 
 import java.util.List;
 
 public interface IReturn {
 
-    public void returnProducts(List<Product> products);
+    void returnProducts(Receipt receipt);
 }

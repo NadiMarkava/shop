@@ -17,7 +17,6 @@ public class Receipt extends AbstractEntity {
     private List<Product> productList;
     private Salesman salesman;
     private Customer customer;
-    private static double summOfReceipts = 0;
 
     public Receipt(List<Product> productList, Salesman salesman, Customer customer) {
         LocalDateTime myDateObj = LocalDateTime.now();
@@ -31,7 +30,6 @@ public class Receipt extends AbstractEntity {
             summ += product.getPrice();
         }
         this.summ = summ;
-        summOfReceipts += summ;
     }
     public Receipt(){
     }
@@ -54,10 +52,6 @@ public class Receipt extends AbstractEntity {
 
     public Customer getCustomer() {
         return customer;
-    }
-
-    public static double getSummOfReceipts() {
-        return summOfReceipts;
     }
 
     @Override

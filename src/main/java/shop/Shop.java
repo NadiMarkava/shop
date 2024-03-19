@@ -1,12 +1,15 @@
 package shop;
 
+import interfaces.IClose;
+import interfaces.IReturn;
+import interfaces.ISelling;
 import people.Customer;
 import people.Salesman;
 import java.util.List;
 
-public class Shop extends AbstractEntity{
+public class Shop extends AbstractEntity implements ISelling, IReturn, IClose {
 
-    private String regNumber;
+    private final String REGNUMBER = "5384255";
     private String name;
     private Address address;
     private Storehouse storehouse;
@@ -25,15 +28,16 @@ public class Shop extends AbstractEntity{
         customer.setDiscountCard(discountCard);
     }
 
-    public Receipt getReceipt(Customer customer){
-        CashRegister cashRegister = getAvailableCashRegister();
-        cashRegister.setBusy(true);
-        Receipt receipt = cashRegister.sellProducts(customer);
-        addReceipt(receipt);
-        cashRegister.setBusy(false);
-        storehouse.removeProducts(customer.getProductsToBuy());
-//        returnItemsFromCustomer(receipt);
-        return receipt;
+    public void setStorehouse(Storehouse storehouse) {
+        this.storehouse = storehouse;
+    }
+
+    public void setCashRegisterList(List<CashRegister> cashRegisterList) {
+        this.cashRegisterList = cashRegisterList;
+    }
+
+    public void setReceiptList(List<Receipt> receiptList) {
+        this.receiptList = receiptList;
     }
 
     public CashRegister getAvailableCashRegister() {
@@ -43,13 +47,6 @@ public class Shop extends AbstractEntity{
             }
         }
         throw new UnsupportedOperationException("No available cash registers");
-    }
-
-    public void returnItemsFromCustomer(Receipt receipt) {
-        List<Product> products = receipt.getProductList();
-        for(int i =0; i<products.size(); i++) {
-            getStorehouse().addProduct(products.get(i));
-        }
     }
 
     public void addCustomer(Customer customer) {
@@ -69,22 +66,34 @@ public class Shop extends AbstractEntity{
     }
 
     @Override
+    public Receipt sell(Customer customer){
+        CashRegister cashRegister = getAvailableCashRegister();
+        cashRegister.setBusy(true);
+        Receipt receipt = cashRegister.sell(customer);
+        addReceipt(receipt);
+        cashRegister.setBusy(false);
+        storehouse.removeProducts(customer.getProductsToBuy());
+        return receipt;
+    }
+
+    @Override
+    public void returnProducts(Receipt receipt) {
+        List<Product> products = receipt.getProductList();
+        for(int i =0; i<products.size(); i++) {
+            getStorehouse().addProduct(products.get(i));
+        }
+    }
+
+    @Override
+    public void close() {
+        System.out.println("Shop is closed");
+    }
+
+    @Override
     public String toString() {
         return "Shop [" +
-                "Reg number=" + regNumber + ' ' +
+                "Reg number=" + REGNUMBER + ' ' +
                 ", Name=" + name + ' ' +
                 ", Address=" + address.getCity() + ", " + address.getStreet() + ", " + address.getHouse() + "]";
-    }
-
-    public void setStorehouse(Storehouse storehouse) {
-        this.storehouse = storehouse;
-    }
-
-    public void setCashRegisterList(List<CashRegister> cashRegisterList) {
-        this.cashRegisterList = cashRegisterList;
-    }
-
-    public void setReceiptList(List<Receipt> receiptList) {
-        this.receiptList = receiptList;
     }
 }

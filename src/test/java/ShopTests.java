@@ -4,71 +4,63 @@ import people.Salesman;
 import shop.*;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class ShopTests {
 
     public static void main(String[] args) {
 
-        //variables
-        double discountCard = 10.00;
-        Provider provider = new Provider("Sofiika");
-        ProductCategory productCategory = new ProductCategory("Milk Products");
-        Salesman salesman = new Salesman("John", "Obermaier", 450);
-        Customer customer = new Customer("Elisaveta", "Zhuk", new DiscountCard(discountCard));
-        Product product = new Product("Yogurt", 3.45, productCategory, provider);
-        Product productA = new Product("Cream", 7.20, productCategory, provider);
-        Product productFirst = new Product("Bread", 1.85, new ProductCategory("Bread Products"), new Provider("BreadTasty"));
-        Product productSecond = new Product("Meat", 7.20, new ProductCategory("Meat Products"), new Provider("RealMeat"));
-
-        //shop has
         Shop shop = new Shop();
+
+        Product product = new Product("Yogurt", 3.45, new ProductCategory("Milk Products"), new Provider("Sofiika"));
+        Product productB = new Product("Ice cream", 1.45, new ProductCategory("Milk Products"), new Provider("Miskays marka"));
+        int count = 20;
+        Salesman salesman = new Salesman("John", "Obermaier", 450);
+        Salesman salesman1 = new Salesman("Sepp", "Herrmann", 450);
+
+
+        Customer customer = new Customer("Elisaveta", "Zhuk");
         Storehouse storehouse = new Storehouse();
         shop.setStorehouse(storehouse);
-        List<Product> shopProducts = new ArrayList<>();
-        shopProducts.add(productFirst);
-        shopProducts.add(productSecond);
-        shop.getStorehouse().setProductList(shopProducts);
-        System.out.println("Products are in the shop=" + shopProducts);
 
-        //shop buys
 
-        List<Product> providerProducts = new ArrayList<>();
-        providerProducts.add(product);
-        providerProducts.add(productA);
-        provider.setProductList(providerProducts);
-//        provider.sell(providerProducts);
-        shop.getStorehouse().buy(providerProducts);
-        System.out.println("Products after delivery=" + shopProducts);
+        Map<Product, Integer> availableProducts = new HashMap<>();
+        availableProducts.put(product, count);
+        storehouse.setAvailableProducts(availableProducts);
+        System.out.println("Available Products" + availableProducts);
+        storehouse.addProduct(productB);
+        storehouse.addProduct(productB);
+        storehouse.addProduct(product);
+        storehouse.addProduct(product);
 
-        //customer buys
+        System.out.println("Available Products" + availableProducts);
 
-        Product wishThirdProduct = new Product("Cola", 3.45, productCategory, provider);
-        List<Product> wishProducts = new ArrayList<>();
-        wishProducts.add(productFirst);
-        wishProducts.add(productSecond);
-        wishProducts.add(wishThirdProduct);
-        customer.setWishList(wishProducts);
-        System.out.println("Card balance="+ customer.getDiscountCard().toString());
-        salesman.say();
-        List<Product> customerProducts = customer.buy(shopProducts);
-        CashRegister cashRegister = new CashRegister();
-        cashRegister.setStorehouse(storehouse);
-        double summ = cashRegister.getPrimarySumm(customerProducts);
-        customer.pay(summ);
 
-        System.out.println("Card balance after pay="+ customer.getDiscountCard().toString());
-        Receipt receipt = cashRegister.saleProducts(customerProducts, salesman, customer);
-        System.out.println("Receipt=" + receipt);
-        System.out.println("Products after purchase= " + shopProducts);
+        List<Product> productsToBuy = new ArrayList<>();
+        customer.setProductsToBuy(productsToBuy);
+        productsToBuy = customer.takeProduct(product);
+        customer.takeProduct(productB);
+        System.out.println("Products to buy" + productsToBuy);
+//        shop.createDiscountCard(customer, 5);
+        List<CashRegister> cashRegisterList = new ArrayList<>();
+        List<Receipt> receiptList = new ArrayList<>();
+        CashRegister cashRegister = new CashRegister(salesman);
+        CashRegister cashRegister1 = new CashRegister(salesman1);
+        cashRegisterList.add(cashRegister);
+        cashRegisterList.add(cashRegister1);
+        shop.setCashRegisterList(cashRegisterList);
+        shop.setReceiptList(receiptList);
+        cashRegister.setBusy(true);
+//        cashRegister1.setBusy(true);
+        Receipt receipt = shop.sell(customer);
+        System.out.println("Receipt" + receipt.toString());
+//        cashRegister.sell(customer);
 
-        //customer return
+        System.out.println("Available Products after selling" + availableProducts);
+        shop.returnProducts(receipt);
 
-        List<Product> customerReturnProducts = new ArrayList<>();
-        customerReturnProducts.add(product);
-        customer.returnProducts(customerReturnProducts);
-        shop.getStorehouse().returnProducts(customerReturnProducts);
-        System.out.println("Products after return=" + shopProducts);
-        System.out.println("Card balance after return products=" + customer.getDiscountCard().toString());
+        System.out.println("Available Products after return" + availableProducts);
     }
 }

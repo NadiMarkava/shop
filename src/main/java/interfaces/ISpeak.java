@@ -2,5 +2,5 @@ package interfaces;
 
 public interface ISpeak {
 
-    public void say(String massage);
+    void say(String message);
 }
