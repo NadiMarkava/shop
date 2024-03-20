@@ -4,9 +4,11 @@ application.log
 sql.log
 /reports/
 /bin/
+/out/
 /.classpath
 .DS_Store
 .project
 /.settings/
 .idea
 *.iml
+
