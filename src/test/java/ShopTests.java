@@ -1,4 +1,7 @@
 
+import exceptions.*;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import people.Customer;
 import people.Salesman;
 import shop.*;
@@ -8,14 +11,20 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+
 public class ShopTests {
 
-    public static void main(String[] args) {
+    private final static Logger LOGGER = LogManager.getLogger(ShopTests.class);
+
+    public static void main(String[] args) throws ProductNotExistsException, InvalidInputException, SummLessThanZeroException, ProductCannotBeReturnException, DiscoountCardAlreadyExists {
 
         Shop shop = new Shop();
 
-        Product product = new Product("Yogurt", 3.45, new ProductCategory("Milk Products"), new Provider("Sofiika"));
-        Product productB = new Product("Ice cream", 1.45, new ProductCategory("Milk Products"), new Provider("Miskays marka"));
+        Product product = new Product("Yogurt", -3.45, new ProductCategory("Milk Products"), new Provider("Sofiika"));
+        Product productB = new Product("Ice cream", -1.45, new ProductCategory("Milk Products"), new Provider("Miskays marka"));
+//        Product productC = new Product("Prosseco", 13.45, new ProductCategory("Drinks"), new Provider("Italia marka"));
+        Product productD = new Product("oil", 23.45, new ProductCategory("Auto"), new Provider("BMW marka"));
+
         Salesman salesman = new Salesman("John", "Obermaier", 450);
         Salesman salesman1 = new Salesman("Sepp", "Herrmann", 450);
 
@@ -32,6 +41,7 @@ public class ShopTests {
         storehouse.addProduct(productB,1);
         storehouse.addProduct(product, 6);
         storehouse.addProduct(product, 1);
+        storehouse.addProduct(productD, 2);
 
         System.out.println("Available Products" + availableProducts);
 
@@ -39,9 +49,16 @@ public class ShopTests {
         Map<Product, Integer> productsToBuy = new HashMap<>();
         customer.setProductsToBuy(productsToBuy);
         productsToBuy = customer.takeProduct(product, 2);
-        customer.takeProduct(productB, 2);
-        System.out.println("Products to buy" + productsToBuy);
+        customer.takeProduct(productD, 2);
+//        customer.takeProduct(productC, 2);
+
         shop.createDiscountCard(customer, 5);
+        System.out.println("Products to buy" + productsToBuy);
+        try {
+            shop.createDiscountCard(customer, 5);
+        } catch (DiscoountCardAlreadyExists e) {
+            System.out.println("!!!!This customer has alreade discount card!!!" + customer);
+        }
         List<CashRegister> cashRegisterList = new ArrayList<>();
         List<Receipt> receiptList = new ArrayList<>();
         CashRegister cashRegister = new CashRegister(salesman);

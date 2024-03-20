@@ -1,10 +1,13 @@
 package shop;
 
+import exceptions.*;
 import interfaces.IClose;
 import interfaces.IReturn;
 import interfaces.ISelling;
 import people.Customer;
 import people.Salesman;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -24,9 +27,13 @@ public class Shop extends AbstractEntity implements ISelling, IReturn, IClose {
     public Shop(){
     }
 
-    public void createDiscountCard(Customer customer, double discount){
-        DiscountCard discountCard = new DiscountCard(discount);
-        customer.setDiscountCard(discountCard);
+    public void createDiscountCard(Customer customer, double discount) throws DiscoountCardAlreadyExists {
+        if(customer.hasDiscountCard()){
+            throw new DiscoountCardAlreadyExists();
+        } else{
+            DiscountCard discountCard = new DiscountCard(discount);
+            customer.setDiscountCard(discountCard);
+        }
     }
 
     public void setStorehouse(Storehouse storehouse) {
@@ -67,10 +74,15 @@ public class Shop extends AbstractEntity implements ISelling, IReturn, IClose {
     }
 
     @Override
-    public Receipt sell(Customer customer){
+    public Receipt sell(Customer customer) throws ProductNotExistsException, InvalidInputException, SummLessThanZeroException {
         CashRegister cashRegister = getAvailableCashRegister();
         cashRegister.setBusy(true);
-        storehouse.checkIfProductsPresent(customer.getProductsToBuy());
+        try {
+            storehouse.checkIfProductsPresent(customer.getProductsToBuy());
+        } catch
+            (ProductNotExistsException e){
+            System.out.println("!!!!!No such product in storehouse or wrong quantity!!!!" );
+        }
         Receipt receipt = cashRegister.sell(customer);
         addReceipt(receipt);
         cashRegister.setBusy(false);
@@ -79,10 +91,14 @@ public class Shop extends AbstractEntity implements ISelling, IReturn, IClose {
     }
 
     @Override
-    public void returnProducts(Receipt receipt) {
+    public void returnProducts(Receipt receipt) throws ProductCannotBeReturnException {
         Map<Product, Integer> products = receipt.getProductList();
         for (Product product : products.keySet()) {
-            getStorehouse().addProduct(product,  products.get(product));
+            try {
+                getStorehouse().isProductCanBeReturned(product, products.get(product));
+            } catch (ProductCannotBeReturnException ex) {
+                System.out.println("!!!!Products of this category can not be return!!!");
+            }
         }
     }
 

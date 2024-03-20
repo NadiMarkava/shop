@@ -1,12 +1,12 @@
 package shop;
 
-import exceptions.MyCustomException;
+import exceptions.InvalidInputException;
+import exceptions.SummLessThanZeroException;
 import interfaces.IClose;
 import interfaces.ISelling;
 import people.Customer;
 import people.Salesman;
 
-import java.util.List;
 import java.util.Map;
 
 public final class CashRegister extends AbstractEntity implements ISelling, IClose {
@@ -28,22 +28,14 @@ public final class CashRegister extends AbstractEntity implements ISelling, IClo
     }
 
     @Override
-    public Receipt sell(Customer customer) {
+    public Receipt sell(Customer customer) throws InvalidInputException, SummLessThanZeroException {
         salesman.say("Welcome");
-        try {
-            if (salesman.getLastName().contains(" ")) {
-                throw new MyCustomException();
-            }
-        } catch (MyCustomException ex) {
-            System.out.println("!!!Last name contains blank:!!!" + salesman.getFirstName());
+        if (salesman.getLastName() == null) {
+            throw new InvalidInputException("!!!Last name can't be null!!!" + salesman.getFirstName());
         }
         double summ = calculateSumm(customer.getProductsToBuy());
-        try {
-            if (summ < 0) {
-                throw new MyCustomException();
-            }
-        } catch (MyCustomException ex) {
-            System.out.println("!!!Only Positive Numbers!!!");
+        if (summ < 0) {
+            throw new SummLessThanZeroException("!!!Only Positive Numbers in Summ!!!");
         }
         salesman.say("Your total: " + summ);
         if(customer.hasDiscountCard()){

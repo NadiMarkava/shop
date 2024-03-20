@@ -1,8 +1,9 @@
 package shop;
 
-import exceptions.MyCustomException;
+import exceptions.InvalidInputException;
+import exceptions.ProductCannotBeReturnException;
+import exceptions.ProductNotExistsException;
 
-import java.util.List;
 import java.util.Map;
 
 public class Storehouse {
@@ -19,27 +20,31 @@ public class Storehouse {
         }
     }
 
-    public boolean checkIfProductsPresent(Map<Product, Integer> products) {
+    public boolean checkIfProductsPresent(Map<Product, Integer> products) throws ProductNotExistsException {
         boolean poductsPresent = false;
         for (Product product : products.keySet()) {
-            try {
                 if (availableProducts.containsKey(product)
                         && availableProducts.get(product) >= products.get(product)) {
                     poductsPresent = true;
-                } else throw new MyCustomException();
-            } catch (MyCustomException ex) {
-                System.out.println("!!!!!No such product in storehouse or wrong quantity!!!!" + product);
-            }
+                } else throw new ProductNotExistsException();
         }
         return poductsPresent;
     }
 
-    public void addProduct(Product product, int count) {
-        try {
-            availableProducts.merge(product, count, Integer::sum);
-        } catch (NullPointerException e){
-            System.out.println("!!!! need to initializate!!!");
+    public boolean isProductCanBeReturned(Product product, int count) throws ProductCannotBeReturnException {
+        ProductCategory productCategory = new ProductCategory("Auto");
+        boolean result = false;
+        if (product.getProductCategory().getName().equals(productCategory.getName())) {
+            throw new ProductCannotBeReturnException();
+        } else {
+            addProduct(product, count);
         }
+        return result;
+    }
+
+
+    public void addProduct(Product product, int count) {
+        availableProducts.merge(product, count, Integer::sum);
     }
 
     public void setAvailableProducts(Map<Product, Integer> availableProducts) {
