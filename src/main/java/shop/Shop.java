@@ -70,6 +70,7 @@ public class Shop extends AbstractEntity implements ISelling, IReturn, IClose {
     public Receipt sell(Customer customer){
         CashRegister cashRegister = getAvailableCashRegister();
         cashRegister.setBusy(true);
+        storehouse.checkIfProductsPresent(customer.getProductsToBuy());
         Receipt receipt = cashRegister.sell(customer);
         addReceipt(receipt);
         cashRegister.setBusy(false);

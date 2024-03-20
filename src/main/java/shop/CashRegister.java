@@ -1,5 +1,6 @@
 package shop;
 
+import exceptions.MyCustomException;
 import interfaces.IClose;
 import interfaces.ISelling;
 import people.Customer;
@@ -29,7 +30,21 @@ public final class CashRegister extends AbstractEntity implements ISelling, IClo
     @Override
     public Receipt sell(Customer customer) {
         salesman.say("Welcome");
+        try {
+            if (salesman.getLastName().contains(" ")) {
+                throw new MyCustomException();
+            }
+        } catch (MyCustomException ex) {
+            System.out.println("!!!Last name contains blank:!!!" + salesman.getFirstName());
+        }
         double summ = calculateSumm(customer.getProductsToBuy());
+        try {
+            if (summ < 0) {
+                throw new MyCustomException();
+            }
+        } catch (MyCustomException ex) {
+            System.out.println("!!!Only Positive Numbers!!!");
+        }
         salesman.say("Your total: " + summ);
         if(customer.hasDiscountCard()){
             double discount = summ * customer.getDiscountCard().getDiscount()/100;
