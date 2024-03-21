@@ -1,15 +1,18 @@
 package shop;
 
+import exceptions.SummLessThanZeroException;
 import interfaces.IClose;
 import interfaces.ISelling;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import people.Customer;
 import people.Salesman;
 
-import java.util.List;
 import java.util.Map;
 
 public final class CashRegister extends AbstractEntity implements ISelling, IClose {
 
+    private final static Logger LOGGER = LogManager.getLogger(CashRegister.class);
     private Salesman salesman;
     private boolean isBusy = false;
     private static double summOfReceipts = 0;
@@ -18,7 +21,7 @@ public final class CashRegister extends AbstractEntity implements ISelling, IClo
         this.salesman = salesman;
     }
 
-    public double calculateSumm(Map<Product, Integer> products){
+    public double calculateSumm(Map<Product, Integer> products) {
         double summ = 0;
         for (Product product : products.keySet()) {
             summ += product.getPrice() * products.get(product);
@@ -27,12 +30,15 @@ public final class CashRegister extends AbstractEntity implements ISelling, IClo
     }
 
     @Override
-    public Receipt sell(Customer customer) {
+    public Receipt sell(Customer customer) throws SummLessThanZeroException {
         salesman.say("Welcome");
         double summ = calculateSumm(customer.getProductsToBuy());
+        if (summ < 0) {
+            throw new SummLessThanZeroException("!!!Only Positive Numbers in Summ!!!");
+        }
         salesman.say("Your total: " + summ);
-        if(customer.hasDiscountCard()){
-            double discount = summ * customer.getDiscountCard().getDiscount()/100;
+        if (customer.hasDiscountCard()) {
+            double discount = summ * customer.getDiscountCard().getDiscount() / 100;
             summ = summ - discount;
         }
         customer.pay(summ);
@@ -41,7 +47,7 @@ public final class CashRegister extends AbstractEntity implements ISelling, IClo
         return new Receipt(customer.getProductsToBuy(), salesman, customer);
     }
 
-    public boolean isBusy(){
+    public boolean isBusy() {
         return isBusy;
     }
 
@@ -55,6 +61,6 @@ public final class CashRegister extends AbstractEntity implements ISelling, IClo
 
     @Override
     public void close() {
-        System.out.println("Total amount for day " + getSummOfReceipts());
+        LOGGER.info("Total amount for day " + getSummOfReceipts());
     }
 }

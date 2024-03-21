@@ -1,12 +1,9 @@
 package interfaces;
 
-import shop.DiscountCard;
-import shop.Product;
+import exceptions.ProductCannotBeReturnException;
 import shop.Receipt;
-
-import java.util.List;
 
 public interface IReturn {
 
-    void returnProducts(Receipt receipt);
+    void returnProducts(Receipt receipt) throws ProductCannotBeReturnException;
 }

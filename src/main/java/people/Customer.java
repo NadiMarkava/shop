@@ -1,22 +1,24 @@
 package people;
 
+import exceptions.InvalidInputException;
+import interfaces.IPayment;
 import interfaces.IReturn;
 import interfaces.ISpeak;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import shop.DiscountCard;
-import interfaces.IPayment;
 import shop.Product;
 import shop.Receipt;
 
-import java.util.List;
 import java.util.Map;
 
 public class Customer extends Person implements IPayment, ISpeak, IReturn {
 
+    private final static Logger LOGGER = LogManager.getLogger(Customer.class);
     private DiscountCard discountCard;
-
     private Map<Product, Integer> productsToBuy;
 
-    public Customer(String firstName, String lastName) {
+    public Customer(String firstName, String lastName) throws InvalidInputException {
         super(firstName, lastName);
     }
 
@@ -55,17 +57,17 @@ public class Customer extends Person implements IPayment, ISpeak, IReturn {
 
     @Override
     public void say(String message) {
-        System.out.println(message);
+        LOGGER.info(message);
     }
 
     @Override
     public void pay(double summ) {
-        System.out.println("----Paid------" + summ);
+        LOGGER.info("----Paid------" + summ);
     }
 
     @Override
     public void returnProducts(Receipt receipt) {
-        System.out.println("----Refund------");
+        LOGGER.info("----Refund------");
     }
 
     @Override
