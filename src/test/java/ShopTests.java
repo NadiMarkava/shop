@@ -1,4 +1,5 @@
 
+import collections.CustomLinkedList;
 import exceptions.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -16,7 +17,7 @@ public class ShopTests {
 
     private final static Logger LOGGER = LogManager.getLogger(ShopTests.class);
 
-    public static void main(String[] args) throws InvalidInputException, SummLessThanZeroException, ProductCannotBeReturnException, DiscountCardAlreadyExistsException {
+    public static void main(String[] args) throws InvalidInputException, SummLessThanZeroException, DiscountCardAlreadyExistsException {
         Shop shop = new Shop();
         Product product = new Product("Yogurt", 3.45, new ProductCategory("Milk Products"), new Provider("Sofiika"));
         Product productB = new Product("Ice cream", 1.45, new ProductCategory("Milk Products"), new Provider("Miskays marka"));
@@ -25,9 +26,19 @@ public class ShopTests {
         Salesman salesman = new Salesman("John", "Obermaier", 450);
         Salesman salesman1 = new Salesman("Sepp", "Herrmann", 450);
         Customer customer = new Customer("Elisaveta", "Zhuk");
+        //Collections
+        List<Salesman> salesmanList = new ArrayList<>();
+        List<CashRegister> cashRegisterList = new ArrayList<>();
+        List<Receipt> receiptList = new ArrayList<>();
+        List<Customer> customerList = new ArrayList<>();
+        Map<Product, Integer> availableProducts = new HashMap<>();
+
+        salesmanList.add(salesman);
+        salesmanList.add(salesman1);
+        customerList.add(customer);
+
         Storehouse storehouse = new Storehouse();
         shop.setStorehouse(storehouse);
-        Map<Product, Integer> availableProducts = new HashMap<>();
         storehouse.setAvailableProducts(availableProducts);
 
         LOGGER.info("Available Products" + availableProducts);
@@ -54,8 +65,7 @@ public class ShopTests {
         } catch (DiscountCardAlreadyExistsException e) {
             LOGGER.error("!!!!This customer has already discount card!!!" + customer);
         }
-        List<CashRegister> cashRegisterList = new ArrayList<>();
-        List<Receipt> receiptList = new ArrayList<>();
+
         CashRegister cashRegister = new CashRegister(salesman);
         CashRegister cashRegister1 = new CashRegister(salesman1);
         cashRegisterList.add(cashRegister);
