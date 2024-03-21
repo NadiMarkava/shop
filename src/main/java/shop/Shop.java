@@ -29,7 +29,7 @@ public class Shop extends AbstractEntity implements ISelling, IReturn, IClose {
     private List<Provider> providerList;
     private CashRegister cashRegister;
     private List<CashRegister> cashRegisterList;
-    private Set<Receipt> receiptList ;
+    private Set<Receipt> receiptList;
 
     public Shop() {
     }

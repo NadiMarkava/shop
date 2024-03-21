@@ -25,8 +25,8 @@ public class CustomLinkedList<E> {
         }
     }
 
-    public void addAtLast(E val){
-        if(tail==null){
+    public void addAtLast(E val) {
+        if (tail == null) {
             addAtFirst(val);
             return;
         }
@@ -36,7 +36,7 @@ public class CustomLinkedList<E> {
         tail = temp;
     }
 
-    public void remove(CustomLinkedList<E> list,  E val) {
+    public void remove(CustomLinkedList<E> list, E val) {
         Node curr = list.head, prev = null;
         while (curr != null && curr.value != val) {
             prev = curr;
@@ -48,12 +48,12 @@ public class CustomLinkedList<E> {
     }
 
     @Override
-    public String toString(){
+    public String toString() {
         StringBuilder builder = new StringBuilder();
         Node<E> temp = head;
-        while(temp!=null){
+        while (temp != null) {
             builder.append(temp.value).append("->");
-            if(temp==tail) builder.append("End");
+            if (temp == tail) builder.append("End");
             temp = temp.next;
         }
         return builder.toString();
