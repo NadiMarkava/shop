@@ -1,12 +1,17 @@
 package people;
 
+import exceptions.InvalidInputException;
 import interfaces.ISpeak;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import shop.Shop;
 
 public class Salesman extends Person implements ISpeak {
 
+    private final static Logger LOGGER = LogManager.getLogger(Salesman.class);
     private double salary;
 
-    public Salesman(String firstName, String lastName, double salary) {
+    public Salesman(String firstName, String lastName, double salary) throws InvalidInputException {
         super(firstName, lastName);
         this.salary = salary;
     }
@@ -21,6 +26,6 @@ public class Salesman extends Person implements ISpeak {
 
     @Override
     public void say(String message) {
-        System.out.println(message);
+        LOGGER.info(message);
     }
 }

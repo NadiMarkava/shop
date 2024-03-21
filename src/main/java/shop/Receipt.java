@@ -3,12 +3,10 @@ package shop;
 import people.Customer;
 import people.Salesman;
 
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Map;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class Receipt extends AbstractEntity {
@@ -32,7 +30,8 @@ public class Receipt extends AbstractEntity {
         }
         this.summ = summ;
     }
-    public Receipt(){
+
+    public Receipt() {
     }
 
     public double getSumm() {

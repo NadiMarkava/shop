@@ -1,6 +1,5 @@
 package shop;
 
-import exceptions.InvalidInputException;
 import exceptions.ProductCannotBeReturnException;
 import exceptions.ProductNotExistsException;
 
@@ -23,18 +22,17 @@ public class Storehouse {
     public boolean checkIfProductsPresent(Map<Product, Integer> products) throws ProductNotExistsException {
         boolean poductsPresent = false;
         for (Product product : products.keySet()) {
-                if (availableProducts.containsKey(product)
-                        && availableProducts.get(product) >= products.get(product)) {
-                    poductsPresent = true;
-                } else throw new ProductNotExistsException();
+            if (availableProducts.containsKey(product)
+                    && availableProducts.get(product) >= products.get(product)) {
+                poductsPresent = true;
+            } else throw new ProductNotExistsException();
         }
         return poductsPresent;
     }
 
     public boolean isProductCanBeReturned(Product product, int count) throws ProductCannotBeReturnException {
-        ProductCategory productCategory = new ProductCategory("Auto");
         boolean result = false;
-        if (product.getProductCategory().getName().equals(productCategory.getName())) {
+        if (product.getProductCategory().getName().equals("Auto")) {
             throw new ProductCannotBeReturnException();
         } else {
             addProduct(product, count);

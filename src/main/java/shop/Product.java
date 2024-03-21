@@ -1,7 +1,5 @@
 package shop;
 
-import java.util.List;
-
 public class Product extends AbstractEntity {
 
     private String name;

@@ -1,18 +1,23 @@
 package shop;
 
-import exceptions.*;
+import exceptions.DiscountCardAlreadyExistsException;
+import exceptions.ProductCannotBeReturnException;
+import exceptions.ProductNotExistsException;
+import exceptions.SummLessThanZeroException;
 import interfaces.IClose;
 import interfaces.IReturn;
 import interfaces.ISelling;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import people.Customer;
 import people.Salesman;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 public class Shop extends AbstractEntity implements ISelling, IReturn, IClose {
 
+    private final static Logger LOGGER = LogManager.getLogger(Shop.class);
     private static final String REGNUMBER = "5384255";
     private String name;
     private Address address;
@@ -24,13 +29,13 @@ public class Shop extends AbstractEntity implements ISelling, IReturn, IClose {
     private List<CashRegister> cashRegisterList;
     private List<Receipt> receiptList;
 
-    public Shop(){
+    public Shop() {
     }
 
-    public void createDiscountCard(Customer customer, double discount) throws DiscoountCardAlreadyExists {
-        if(customer.hasDiscountCard()){
-            throw new DiscoountCardAlreadyExists();
-        } else{
+    public void createDiscountCard(Customer customer, double discount) throws DiscountCardAlreadyExistsException {
+        if (customer.hasDiscountCard()) {
+            throw new DiscountCardAlreadyExistsException();
+        } else {
             DiscountCard discountCard = new DiscountCard(discount);
             customer.setDiscountCard(discountCard);
         }
@@ -74,14 +79,14 @@ public class Shop extends AbstractEntity implements ISelling, IReturn, IClose {
     }
 
     @Override
-    public Receipt sell(Customer customer) throws ProductNotExistsException, InvalidInputException, SummLessThanZeroException {
+    public Receipt sell(Customer customer) throws SummLessThanZeroException {
         CashRegister cashRegister = getAvailableCashRegister();
         cashRegister.setBusy(true);
         try {
             storehouse.checkIfProductsPresent(customer.getProductsToBuy());
         } catch
-            (ProductNotExistsException e){
-            System.out.println("!!!!!No such product in storehouse or wrong quantity!!!!" );
+        (ProductNotExistsException e) {
+            LOGGER.error("!!!!!No such product in storehouse or wrong quantity!!!!");
         }
         Receipt receipt = cashRegister.sell(customer);
         addReceipt(receipt);
@@ -91,20 +96,20 @@ public class Shop extends AbstractEntity implements ISelling, IReturn, IClose {
     }
 
     @Override
-    public void returnProducts(Receipt receipt) throws ProductCannotBeReturnException {
+    public void returnProducts(Receipt receipt) {
         Map<Product, Integer> products = receipt.getProductList();
         for (Product product : products.keySet()) {
             try {
                 getStorehouse().isProductCanBeReturned(product, products.get(product));
             } catch (ProductCannotBeReturnException ex) {
-                System.out.println("!!!!Products of this category can not be return!!!");
+                LOGGER.error("!!!!Products of this category can not be return!!!");
             }
         }
     }
 
     @Override
     public void close() {
-        System.out.println("Shop is closed");
+        LOGGER.info("Shop is closed");
     }
 
     @Override
