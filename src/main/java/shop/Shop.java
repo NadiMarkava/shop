@@ -1,5 +1,6 @@
 package shop;
 
+import collections.CustomLinkedList;
 import exceptions.DiscountCardAlreadyExistsException;
 import exceptions.ProductCannotBeReturnException;
 import exceptions.ProductNotExistsException;
@@ -14,6 +15,7 @@ import people.Salesman;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class Shop extends AbstractEntity implements ISelling, IReturn, IClose {
 
@@ -22,12 +24,12 @@ public class Shop extends AbstractEntity implements ISelling, IReturn, IClose {
     private String name;
     private Address address;
     private Storehouse storehouse;
-    private List<Salesman> salesmanList;
-    private List<Customer> customerList;
+    private CustomLinkedList<Salesman> salesmanList;
+    private Set<Customer> customerList;
     private List<Provider> providerList;
     private CashRegister cashRegister;
     private List<CashRegister> cashRegisterList;
-    private List<Receipt> receiptList;
+    private Set<Receipt> receiptList;
 
     public Shop() {
     }
@@ -49,7 +51,7 @@ public class Shop extends AbstractEntity implements ISelling, IReturn, IClose {
         this.cashRegisterList = cashRegisterList;
     }
 
-    public void setReceiptList(List<Receipt> receiptList) {
+    public void setReceiptList(Set<Receipt> receiptList) {
         this.receiptList = receiptList;
     }
 
@@ -76,6 +78,10 @@ public class Shop extends AbstractEntity implements ISelling, IReturn, IClose {
 
     public Storehouse getStorehouse() {
         return storehouse;
+    }
+
+    public void hireSalesman(Salesman salesman) {
+        salesmanList.addAtLast(salesman);
     }
 
     @Override

@@ -4,7 +4,6 @@ import exceptions.InvalidInputException;
 import interfaces.ISpeak;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import shop.Shop;
 
 public class Salesman extends Person implements ISpeak {
 
