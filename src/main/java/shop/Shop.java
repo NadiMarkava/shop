@@ -29,7 +29,7 @@ public class Shop extends AbstractEntity implements ISelling, IReturn, IClose {
     private List<Provider> providerList;
     private CashRegister cashRegister;
     private List<CashRegister> cashRegisterList;
-    private Set<Receipt> receiptList;
+    private List<Receipt> receiptList;
 
     public Shop() {
     }
@@ -51,7 +51,7 @@ public class Shop extends AbstractEntity implements ISelling, IReturn, IClose {
         this.cashRegisterList = cashRegisterList;
     }
 
-    public void setReceiptList(Set<Receipt> receiptList) {
+    public void setReceiptList(List<Receipt> receiptList) {
         this.receiptList = receiptList;
     }
 

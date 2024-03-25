@@ -1,6 +1,6 @@
-
-import collections.CustomLinkedList;
-import exceptions.*;
+import exceptions.DiscountCardAlreadyExistsException;
+import exceptions.InvalidInputException;
+import exceptions.SummLessThanZeroException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import people.Customer;
@@ -13,9 +13,9 @@ import java.util.List;
 import java.util.Map;
 
 
-public class ShopTests {
+public class ShopMain {
 
-    private final static Logger LOGGER = LogManager.getLogger(ShopTests.class);
+    private final static Logger LOGGER = LogManager.getLogger(ShopMain.class);
 
     public static void main(String[] args) throws InvalidInputException, SummLessThanZeroException, DiscountCardAlreadyExistsException {
         Shop shop = new Shop();
