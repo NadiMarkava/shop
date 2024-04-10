@@ -24,11 +24,7 @@ public class Receipt extends AbstractEntity {
         this.productList = productList;
         this.salesman = salesman;
         this.customer = customer;
-        double summ = 0;
-        for (Product product : productList.keySet()) {
-            summ += product.getPrice();
-        }
-        this.summ = summ;
+        this.summ = getSumm(productList);
     }
 
     public Receipt() {
@@ -52,6 +48,10 @@ public class Receipt extends AbstractEntity {
 
     public Customer getCustomer() {
         return customer;
+    }
+
+    public <T extends Product, K> double getSumm(Map<T, K> productList) {
+        return productList.keySet().stream().mapToDouble(product -> product.getPrice()).sum();
     }
 
     @Override

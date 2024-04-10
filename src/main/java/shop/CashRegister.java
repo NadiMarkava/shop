@@ -21,12 +21,9 @@ public final class CashRegister extends AbstractEntity implements ISelling, IClo
         this.salesman = salesman;
     }
 
+
     public double calculateSumm(Map<Product, Integer> products) {
-        double summ = 0;
-        for (Product product : products.keySet()) {
-            summ += product.getPrice() * products.get(product);
-        }
-        return summ;
+        return products.entrySet().stream().mapToDouble(e -> e.getKey().getPrice() * e.getValue()).sum();
     }
 
     @Override
