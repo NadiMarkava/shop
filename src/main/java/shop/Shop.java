@@ -2,6 +2,8 @@ package shop;
 
 import collections.CustomLinkedList;
 import enums.DiscountCard;
+import enums.Event;
+import enums.WorkingDay;
 import exceptions.DiscountCardAlreadyExistsException;
 import exceptions.ProductCannotBeReturnException;
 import exceptions.ProductNotExistsException;
@@ -14,9 +16,12 @@ import org.apache.logging.log4j.Logger;
 import people.Customer;
 import people.Salesman;
 
+import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class Shop extends AbstractEntity implements ISelling, IReturn, IClose {
 
@@ -31,6 +36,7 @@ public class Shop extends AbstractEntity implements ISelling, IReturn, IClose {
     private CashRegister cashRegister;
     private List<CashRegister> cashRegisterList;
     private List<Receipt> receiptList;
+    WorkingDay workingDay;
 
     public Shop() {
     }
@@ -82,6 +88,28 @@ public class Shop extends AbstractEntity implements ISelling, IReturn, IClose {
 
     public void hireSalesman(Salesman salesman) {
         salesmanList.addAtLast(salesman);
+    }
+
+    public void printWorkingHours() {
+        for (WorkingDay workingDay : WorkingDay.values()) {
+            LOGGER.info(
+                    workingDay.printCustom(p -> "Day: " + p.getDay() + "Our supermarket open " + p.getHour())
+            );
+        }
+    }
+
+    public void addEvent(Event event, Map<Product, Integer> products) {
+        DayOfWeek dayOfWeek = DayOfWeek.from(LocalDate.now());
+        if (dayOfWeek.equals(DayOfWeek.WEDNESDAY)) {
+            setEvent(Event.SALE, products);
+        }
+    }
+
+    public void setEvent(Event event, Map<Product, Integer> products) {
+        AtomicReference<String> value = new AtomicReference<>("");
+        products.keySet().forEach(p -> {
+            p.setPrice(p.getPrice() * event.getShopDiscount()/100);
+        });
     }
 
     @Override

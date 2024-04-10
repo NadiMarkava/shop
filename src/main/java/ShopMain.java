@@ -13,8 +13,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 
 public class ShopMain {
@@ -23,6 +21,8 @@ public class ShopMain {
 
     public static void main(String[] args) throws InvalidInputException, SummLessThanZeroException, DiscountCardAlreadyExistsException {
         Shop shop = new Shop();
+
+        shop.printWorkingHours();
         Product product = new Product("Yogurt", 7.45, ProductCategory.MILK_PRODUCTS, new Provider("Savushkin"));
         Product productF = new Product("Yogurt", 3.45, ProductCategory.MILK_PRODUCTS, new Provider("Sofiika"));
         Product productB = new Product("Ice cream", 1.45, ProductCategory.MILK_PRODUCTS, new Provider("Miskays marka"));
@@ -44,6 +44,7 @@ public class ShopMain {
 
         Storehouse storehouse = new Storehouse();
         shop.setStorehouse(storehouse);
+
         storehouse.setAvailableProducts(availableProducts);
 
         LOGGER.info("Available Products" + availableProducts);
@@ -63,7 +64,7 @@ public class ShopMain {
         customer.setProductsToBuy(productsToBuy);
         productsToBuy = customer.takeProduct(product, 2);
         customer.takeProduct(productD, 2);
-//        customer.takeProduct(productC, 2);
+        customer.takeProduct(productC, 2);
         shop.createDiscountCard(customer);
         LOGGER.info("Products to buy" + productsToBuy);
         try {
