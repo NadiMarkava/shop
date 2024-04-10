@@ -1,5 +1,7 @@
 package shop;
 
+import enums.ProductCategory;
+
 public class Product extends AbstractEntity {
 
     private String name;

@@ -1,6 +1,7 @@
 package shop;
 
 import collections.CustomLinkedList;
+import enums.DiscountCard;
 import exceptions.DiscountCardAlreadyExistsException;
 import exceptions.ProductCannotBeReturnException;
 import exceptions.ProductNotExistsException;
@@ -34,12 +35,11 @@ public class Shop extends AbstractEntity implements ISelling, IReturn, IClose {
     public Shop() {
     }
 
-    public void createDiscountCard(Customer customer, double discount) throws DiscountCardAlreadyExistsException {
+    public void createDiscountCard(Customer customer) throws DiscountCardAlreadyExistsException {
         if (customer.hasDiscountCard()) {
             throw new DiscountCardAlreadyExistsException();
         } else {
-            DiscountCard discountCard = new DiscountCard(discount);
-            customer.setDiscountCard(discountCard);
+            customer.setDiscountCard(DiscountCard.STANDART);
         }
     }
 
