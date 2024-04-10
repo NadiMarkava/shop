@@ -15,7 +15,7 @@ import java.util.Map;
 public class Customer extends Person implements IPayment, ISpeak, IReturn {
 
     private final static Logger LOGGER = LogManager.getLogger(Customer.class);
-    DiscountCard discountCard;
+    private DiscountCard discountCard;
     private Map<Product, Integer> productsToBuy;
 
     public Customer(String firstName, String lastName) throws InvalidInputException {

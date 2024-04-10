@@ -10,7 +10,7 @@ public class Salesman extends Person implements ISpeak {
 
     private final static Logger LOGGER = LogManager.getLogger(Salesman.class);
     private double salary;
-    Position position;
+    private Position position;
 
     public Salesman(String firstName, String lastName, Position position, double salary) throws InvalidInputException {
         super(firstName, lastName);

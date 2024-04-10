@@ -5,8 +5,8 @@ public enum DiscountCard {
     STANDART("Standard card", 5),
     LOYALITY("Loyalty card", 10);
 
-    private final String cardName;
-    private final double discount;
+    private String cardName;
+    private double discount;
 
     DiscountCard(String cardName, int discount) {
         this.cardName = cardName;
