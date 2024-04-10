@@ -2,8 +2,8 @@ package shop;
 
 import collections.CustomLinkedList;
 import enums.DiscountCard;
-import enums.Event;
-import enums.WorkingDay;
+import enums.Promotion;
+import enums.CustomerType;
 import exceptions.DiscountCardAlreadyExistsException;
 import exceptions.ProductCannotBeReturnException;
 import exceptions.ProductNotExistsException;
@@ -36,7 +36,6 @@ public class Shop extends AbstractEntity implements ISelling, IReturn, IClose {
     private CashRegister cashRegister;
     private List<CashRegister> cashRegisterList;
     private List<Receipt> receiptList;
-    WorkingDay workingDay;
 
     public Shop() {
     }
@@ -90,25 +89,23 @@ public class Shop extends AbstractEntity implements ISelling, IReturn, IClose {
         salesmanList.addAtLast(salesman);
     }
 
-    public void printWorkingHours() {
-        for (WorkingDay workingDay : WorkingDay.values()) {
-            LOGGER.info(
-                    workingDay.printCustom(p -> "Day: " + p.getDay() + "Our supermarket open " + p.getHour())
-            );
-        }
-    }
-
-    public void addEvent(Event event, Map<Product, Integer> products) {
+    public void addEvent(Customer customer) {
         DayOfWeek dayOfWeek = DayOfWeek.from(LocalDate.now());
-        if (dayOfWeek.equals(DayOfWeek.WEDNESDAY)) {
-            setEvent(Event.SALE, products);
+        if (dayOfWeek.equals(DayOfWeek.MONDAY) && customer.getCustomerType().equals(CustomerType.PENSIONER)) {
+            setEvent(Promotion.SALE_FOR_STUDENT, customer);
+        }
+        if (dayOfWeek.equals(DayOfWeek.WEDNESDAY) && customer.getCustomerType().equals(CustomerType.STUDENT)) {
+            setEvent(Promotion.SALE_FOR_STUDENT, customer);
+        }
+        else{
+            LOGGER.info("No Promotion this day");
         }
     }
 
-    public void setEvent(Event event, Map<Product, Integer> products) {
+    public void setEvent(Promotion promotion, Customer customer) {
         AtomicReference<String> value = new AtomicReference<>("");
-        products.keySet().forEach(p -> {
-            p.setPrice(p.getPrice() * event.getShopDiscount()/100);
+        customer.getProductsToBuy().keySet().forEach(p -> {
+            p.setPrice(p.getPrice() - p.getPrice() * promotion.getShopDiscount()/100);
         });
     }
 
@@ -122,6 +119,7 @@ public class Shop extends AbstractEntity implements ISelling, IReturn, IClose {
         (ProductNotExistsException e) {
             LOGGER.error("!!!!!No such product in storehouse or wrong quantity!!!!");
         }
+        addEvent(customer);
         Receipt receipt = cashRegister.sell(customer);
         addReceipt(receipt);
         cashRegister.setBusy(false);

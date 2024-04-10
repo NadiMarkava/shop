@@ -1,3 +1,4 @@
+import enums.CustomerType;
 import enums.Position;
 import enums.ProductCategory;
 import exceptions.DiscountCardAlreadyExistsException;
@@ -21,8 +22,6 @@ public class ShopMain {
 
     public static void main(String[] args) throws InvalidInputException, SummLessThanZeroException, DiscountCardAlreadyExistsException {
         Shop shop = new Shop();
-
-        shop.printWorkingHours();
         Product product = new Product("Yogurt", 7.45, ProductCategory.MILK_PRODUCTS, new Provider("Savushkin"));
         Product productF = new Product("Yogurt", 3.45, ProductCategory.MILK_PRODUCTS, new Provider("Sofiika"));
         Product productB = new Product("Ice cream", 1.45, ProductCategory.MILK_PRODUCTS, new Provider("Miskays marka"));
@@ -64,9 +63,10 @@ public class ShopMain {
         customer.setProductsToBuy(productsToBuy);
         productsToBuy = customer.takeProduct(product, 2);
         customer.takeProduct(productD, 2);
-        customer.takeProduct(productC, 2);
+        customer.setCustomerType(CustomerType.STUDENT);
         shop.createDiscountCard(customer);
         LOGGER.info("Products to buy" + productsToBuy);
+
         try {
             shop.createDiscountCard(customer);
         } catch (DiscountCardAlreadyExistsException e) {

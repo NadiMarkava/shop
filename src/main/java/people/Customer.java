@@ -1,5 +1,6 @@
 package people;
 
+import enums.CustomerType;
 import enums.DiscountCard;
 import exceptions.InvalidInputException;
 import interfaces.IPayment;
@@ -17,6 +18,7 @@ public class Customer extends Person implements IPayment, ISpeak, IReturn {
     private final static Logger LOGGER = LogManager.getLogger(Customer.class);
     private DiscountCard discountCard;
     private Map<Product, Integer> productsToBuy;
+    private CustomerType customerType;
 
     public Customer(String firstName, String lastName) throws InvalidInputException {
         super(firstName, lastName);
@@ -53,6 +55,15 @@ public class Customer extends Person implements IPayment, ISpeak, IReturn {
 
     public void setDiscountCard(DiscountCard discountCard) {
         this.discountCard = discountCard;
+    }
+
+
+    public CustomerType getCustomerType() {
+        return customerType;
+    }
+
+    public void setCustomerType(CustomerType customerType) {
+        this.customerType = customerType;
     }
 
     @Override
