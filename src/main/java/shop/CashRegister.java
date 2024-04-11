@@ -1,5 +1,7 @@
 package shop;
 
+import enums.CustomerType;
+import enums.Promotion;
 import exceptions.SummLessThanZeroException;
 import interfaces.IClose;
 import interfaces.ISelling;
@@ -8,7 +10,10 @@ import org.apache.logging.log4j.Logger;
 import people.Customer;
 import people.Salesman;
 
+import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicReference;
 
 public final class CashRegister extends AbstractEntity implements ISelling, IClose {
 
@@ -54,6 +59,25 @@ public final class CashRegister extends AbstractEntity implements ISelling, IClo
 
     public static double getSummOfReceipts() {
         return summOfReceipts;
+    }
+
+    public void addEvent(Customer customer) {
+        DayOfWeek dayOfWeek = DayOfWeek.from(LocalDate.now());
+        if (dayOfWeek.equals(DayOfWeek.MONDAY) && customer.getCustomerType().equals(CustomerType.PENSIONER)) {
+            setEvent(Promotion.SALE_FOR_PENSIONER, customer);
+        }
+        if (dayOfWeek.equals(DayOfWeek.WEDNESDAY) && customer.getCustomerType().equals(CustomerType.STUDENT)) {
+            setEvent(Promotion.SALE_FOR_STUDENT, customer);
+        } else {
+            LOGGER.info("No Promotion this day");
+        }
+    }
+
+    public void setEvent(Promotion promotion, Customer customer) {
+        AtomicReference<String> value = new AtomicReference<>("");
+        customer.getProductsToBuy().keySet().forEach(p -> {
+            p.setPrice(p.getPrice() - p.getPrice() * promotion.getShopDiscount()/100);
+        });
     }
 
     @Override

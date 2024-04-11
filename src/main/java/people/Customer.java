@@ -57,8 +57,10 @@ public class Customer extends Person implements IPayment, ISpeak, IReturn {
         this.discountCard = discountCard;
     }
 
-
     public CustomerType getCustomerType() {
+        if (customerType == null) {
+            customerType = CustomerType.GENERAL;
+        }
         return customerType;
     }
 

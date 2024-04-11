@@ -3,7 +3,6 @@ package enums;
 public enum Promotion {
 
     SALE_FOR_STUDENT("Sale for student", 7),
-
     SALE_FOR_PENSIONER("Sale for pensioner", 10);
 
     private String nameDiscount;

@@ -2,8 +2,6 @@ package shop;
 
 import collections.CustomLinkedList;
 import enums.DiscountCard;
-import enums.Promotion;
-import enums.CustomerType;
 import exceptions.DiscountCardAlreadyExistsException;
 import exceptions.ProductCannotBeReturnException;
 import exceptions.ProductNotExistsException;
@@ -16,12 +14,9 @@ import org.apache.logging.log4j.Logger;
 import people.Customer;
 import people.Salesman;
 
-import java.time.DayOfWeek;
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.atomic.AtomicReference;
 
 public class Shop extends AbstractEntity implements ISelling, IReturn, IClose {
 
@@ -89,24 +84,8 @@ public class Shop extends AbstractEntity implements ISelling, IReturn, IClose {
         salesmanList.addAtLast(salesman);
     }
 
-    public void addEvent(Customer customer) {
-        DayOfWeek dayOfWeek = DayOfWeek.from(LocalDate.now());
-        if (dayOfWeek.equals(DayOfWeek.MONDAY) && customer.getCustomerType().equals(CustomerType.PENSIONER)) {
-            setEvent(Promotion.SALE_FOR_STUDENT, customer);
-        }
-        if (dayOfWeek.equals(DayOfWeek.WEDNESDAY) && customer.getCustomerType().equals(CustomerType.STUDENT)) {
-            setEvent(Promotion.SALE_FOR_STUDENT, customer);
-        }
-        else{
-            LOGGER.info("No Promotion this day");
-        }
-    }
-
-    public void setEvent(Promotion promotion, Customer customer) {
-        AtomicReference<String> value = new AtomicReference<>("");
-        customer.getProductsToBuy().keySet().forEach(p -> {
-            p.setPrice(p.getPrice() - p.getPrice() * promotion.getShopDiscount()/100);
-        });
+    public void getAvailablePromotions(Customer customer) {
+        cashRegister.addEvent(customer);
     }
 
     @Override
@@ -119,7 +98,7 @@ public class Shop extends AbstractEntity implements ISelling, IReturn, IClose {
         (ProductNotExistsException e) {
             LOGGER.error("!!!!!No such product in storehouse or wrong quantity!!!!");
         }
-        addEvent(customer);
+        getAvailablePromotions(customer);
         Receipt receipt = cashRegister.sell(customer);
         addReceipt(receipt);
         cashRegister.setBusy(false);
