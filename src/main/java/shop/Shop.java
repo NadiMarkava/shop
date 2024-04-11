@@ -1,7 +1,9 @@
 package shop;
 
 import collections.CustomLinkedList;
+import enums.CustomerType;
 import enums.DiscountCard;
+import enums.Promotion;
 import exceptions.DiscountCardAlreadyExistsException;
 import exceptions.ProductCannotBeReturnException;
 import exceptions.ProductNotExistsException;
@@ -14,6 +16,8 @@ import org.apache.logging.log4j.Logger;
 import people.Customer;
 import people.Salesman;
 
+import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -84,8 +88,20 @@ public class Shop extends AbstractEntity implements ISelling, IReturn, IClose {
         salesmanList.addAtLast(salesman);
     }
 
-    public void getAvailablePromotions(CashRegister cashRegister, Customer customer) {
-        cashRegister.addEvent(customer);
+    public void addPromotion(Customer customer) {
+        DayOfWeek dayOfWeek = DayOfWeek.from(LocalDate.now());
+        if (dayOfWeek.equals(DayOfWeek.MONDAY) && customer.getCustomerType().equals(CustomerType.PENSIONER)) {
+            cashRegister.calculateDiscounts(Promotion.SALE_FOR_PENSIONER, customer);
+        }
+        if (dayOfWeek.equals(DayOfWeek.WEDNESDAY) && customer.getCustomerType().equals(CustomerType.STUDENT)) {
+            cashRegister.calculateDiscounts(Promotion.SALE_FOR_STUDENT, customer);
+        } else {
+            LOGGER.info("No Promotion this day");
+        }
+    }
+
+    public void getAvailablePromotions(Customer customer) {
+        addPromotion(customer);
     }
 
     @Override
@@ -98,7 +114,7 @@ public class Shop extends AbstractEntity implements ISelling, IReturn, IClose {
         (ProductNotExistsException e) {
             LOGGER.error("!!!!!No such product in storehouse or wrong quantity!!!!");
         }
-        getAvailablePromotions(cashRegister, customer);
+        getAvailablePromotions(customer);
         Receipt receipt = cashRegister.sell(customer);
         addReceipt(receipt);
         cashRegister.setBusy(false);
