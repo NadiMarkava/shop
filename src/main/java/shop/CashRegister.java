@@ -67,7 +67,7 @@ public final class CashRegister extends AbstractEntity implements ISelling, IClo
     }
 
     public double calculateDiscounts(List<Promotion> promotions, double summ) {
-        summ = summ - summ * promotions.stream().mapToDouble(p -> p.getShopDiscount()).sum()/100;
+        summ = summ - summ * promotions.stream().mapToDouble(p -> p.getShopDiscount()).sum() / 100;
         return summ;
     }
 

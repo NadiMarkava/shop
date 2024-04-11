@@ -1,7 +1,6 @@
 import enums.CustomerType;
 import enums.Position;
 import enums.ProductCategory;
-import enums.Promotion;
 import exceptions.DiscountCardAlreadyExistsException;
 import exceptions.InvalidInputException;
 import exceptions.SummLessThanZeroException;

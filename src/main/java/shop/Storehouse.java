@@ -42,7 +42,7 @@ public class Storehouse {
         return result;
     }
 
-    public Map<Product, Integer> searchProducts(String name){
+    public Map<Product, Integer> searchProducts(String name) {
         Predicate<? super Map.Entry<Product, Integer>> condition = p -> p.getKey().getName().equals(name);
         return availableProducts.entrySet().stream().filter(condition).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
     }
