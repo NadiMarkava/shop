@@ -12,6 +12,8 @@ import people.Salesman;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 
+import static shop.Shop.getAvailablePromotions;
+
 public final class CashRegister extends AbstractEntity implements ISelling, IClose {
 
     private final static Logger LOGGER = LogManager.getLogger(CashRegister.class);
@@ -24,20 +26,21 @@ public final class CashRegister extends AbstractEntity implements ISelling, IClo
     }
 
 
-    public double calculateSumm(Promotion promotion, Map<Product, Integer> products) {
+    public double calculateSumm(Customer customer) {
+        Promotion promotion = getAvailablePromotions(customer);
         double summ = 0;
         if (promotion == Promotion.NO_PROMOTION) {
-            summ = products.entrySet().stream().mapToDouble(e -> e.getKey().getPrice() * e.getValue()).sum();
+            summ = customer.getProductsToBuy().entrySet().stream().mapToDouble(e -> e.getKey().getPrice() * e.getValue()).sum();
         } else {
-            summ = calculateDiscounts(promotion, products);
+            summ = calculateDiscounts(promotion, customer.getProductsToBuy());
         }
         return summ;
     }
 
     @Override
-    public Receipt sell(Customer customer, Promotion promotion) throws SummLessThanZeroException {
+    public Receipt sell(Customer customer) throws SummLessThanZeroException {
         salesman.say("Welcome");
-        double summ = calculateSumm(promotion, customer.getProductsToBuy());
+        double summ = calculateSumm(customer);
         if (summ < 0) {
             throw new SummLessThanZeroException("!!!Only Positive Numbers in Summ!!!");
         }
@@ -66,7 +69,7 @@ public final class CashRegister extends AbstractEntity implements ISelling, IClo
 
     public double calculateDiscounts(Promotion promotion, Map<Product, Integer> products) {
         double summ = products.entrySet().stream().mapToDouble(e -> e.getKey().getPrice() * e.getValue()).sum();
-        double summWithDiscount = summ-summ*promotion.getShopDiscount()/100;
+        double summWithDiscount = summ - summ * promotion.getShopDiscount() / 100;
         return summWithDiscount;
     }
 

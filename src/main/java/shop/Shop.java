@@ -87,7 +87,7 @@ public class Shop extends AbstractEntity implements ISelling, IReturn, IClose {
         salesmanList.addAtLast(salesman);
     }
 
-    public Promotion getAvailablePromotions(Customer customer) {
+    public static Promotion getAvailablePromotions(Customer customer) {
         DayOfWeek dayOfWeek = DayOfWeek.from(LocalDate.now());
         Promotion promotion= Promotion.NO_PROMOTION;
         if (dayOfWeek.equals(DayOfWeek.MONDAY) && customer.getCustomerType().equals(CustomerType.PENSIONER)) {
@@ -102,7 +102,7 @@ public class Shop extends AbstractEntity implements ISelling, IReturn, IClose {
     }
 
     @Override
-    public Receipt sell(Customer customer, Promotion promotion) throws SummLessThanZeroException {
+    public Receipt sell(Customer customer) throws SummLessThanZeroException {
         CashRegister cashRegister = getAvailableCashRegister();
         cashRegister.setBusy(true);
         try {
@@ -111,8 +111,7 @@ public class Shop extends AbstractEntity implements ISelling, IReturn, IClose {
         (ProductNotExistsException e) {
             LOGGER.error("!!!!!No such product in storehouse or wrong quantity!!!!");
         }
-        promotion = getAvailablePromotions(customer);
-        Receipt receipt = cashRegister.sell(customer, promotion);
+        Receipt receipt = cashRegister.sell(customer);
         addReceipt(receipt);
         cashRegister.setBusy(false);
         storehouse.removeProducts(customer.getProductsToBuy());

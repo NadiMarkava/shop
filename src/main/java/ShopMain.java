@@ -80,7 +80,7 @@ public class ShopMain {
         shop.setCashRegisterList(cashRegisterList);
         shop.setReceiptList(receiptList);
         cashRegister.setBusy(true);
-        Receipt receipt = shop.sell(customer, Promotion.NO_PROMOTION);
+        Receipt receipt = shop.sell(customer);
         LOGGER.info("Receipt" + receipt.toString());
         LOGGER.info("Available Products after selling" + availableProducts);
         shop.returnProducts(receipt);

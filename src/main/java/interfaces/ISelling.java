@@ -7,5 +7,5 @@ import shop.Receipt;
 
 public interface ISelling {
 
-    Receipt sell(Customer customer, Promotion promotion) throws SummLessThanZeroException;
+    Receipt sell(Customer customer) throws SummLessThanZeroException;
 }
