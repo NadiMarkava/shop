@@ -84,7 +84,7 @@ public class Shop extends AbstractEntity implements ISelling, IReturn, IClose {
         salesmanList.addAtLast(salesman);
     }
 
-    public void getAvailablePromotions(Customer customer) {
+    public void getAvailablePromotions(CashRegister cashRegister, Customer customer) {
         cashRegister.addEvent(customer);
     }
 
@@ -98,7 +98,7 @@ public class Shop extends AbstractEntity implements ISelling, IReturn, IClose {
         (ProductNotExistsException e) {
             LOGGER.error("!!!!!No such product in storehouse or wrong quantity!!!!");
         }
-        getAvailablePromotions(customer);
+        getAvailablePromotions(cashRegister, customer);
         Receipt receipt = cashRegister.sell(customer);
         addReceipt(receipt);
         cashRegister.setBusy(false);
