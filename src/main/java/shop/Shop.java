@@ -88,7 +88,7 @@ public class Shop extends AbstractEntity implements ISelling, IReturn, IClose {
         salesmanList.addAtLast(salesman);
     }
 
-    public void addPromotion(Customer customer) {
+    public void getAvailablePromotions(Customer customer) {
         DayOfWeek dayOfWeek = DayOfWeek.from(LocalDate.now());
         if (dayOfWeek.equals(DayOfWeek.MONDAY) && customer.getCustomerType().equals(CustomerType.PENSIONER)) {
             cashRegister.calculateDiscounts(Promotion.SALE_FOR_PENSIONER, customer);
@@ -98,10 +98,6 @@ public class Shop extends AbstractEntity implements ISelling, IReturn, IClose {
         } else {
             LOGGER.info("No Promotion this day");
         }
-    }
-
-    public void getAvailablePromotions(Customer customer) {
-        addPromotion(customer);
     }
 
     @Override
