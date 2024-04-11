@@ -9,6 +9,7 @@ import org.apache.logging.log4j.Logger;
 import people.Customer;
 import people.Salesman;
 
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -27,12 +28,10 @@ public final class CashRegister extends AbstractEntity implements ISelling, IClo
 
 
     public double calculateSumm(Customer customer) {
-        Promotion promotion = getAvailablePromotions(customer);
-        double summ = 0;
-        if (promotion == Promotion.NO_PROMOTION) {
-            summ = customer.getProductsToBuy().entrySet().stream().mapToDouble(e -> e.getKey().getPrice() * e.getValue()).sum();
-        } else {
-            summ = calculateDiscounts(promotion, customer.getProductsToBuy());
+        List<Promotion> promotions = getAvailablePromotions(customer);
+        double summ = customer.getProductsToBuy().entrySet().stream().mapToDouble(e -> e.getKey().getPrice() * e.getValue()).sum();
+        if (!promotions.isEmpty()) {
+            summ = calculateDiscounts(promotions, summ);
         }
         return summ;
     }
@@ -67,10 +66,9 @@ public final class CashRegister extends AbstractEntity implements ISelling, IClo
         return summOfReceipts;
     }
 
-    public double calculateDiscounts(Promotion promotion, Map<Product, Integer> products) {
-        double summ = products.entrySet().stream().mapToDouble(e -> e.getKey().getPrice() * e.getValue()).sum();
-        double summWithDiscount = summ - summ * promotion.getShopDiscount() / 100;
-        return summWithDiscount;
+    public double calculateDiscounts(List<Promotion> promotions, double summ) {
+        summ = summ - summ * promotions.stream().mapToDouble(p -> p.getShopDiscount()).sum()/100;
+        return summ;
     }
 
     @Override

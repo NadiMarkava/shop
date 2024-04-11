@@ -18,6 +18,7 @@ import people.Salesman;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -87,18 +88,22 @@ public class Shop extends AbstractEntity implements ISelling, IReturn, IClose {
         salesmanList.addAtLast(salesman);
     }
 
-    public static Promotion getAvailablePromotions(Customer customer) {
+    public static List<Promotion> getAvailablePromotions(Customer customer) {
         DayOfWeek dayOfWeek = DayOfWeek.from(LocalDate.now());
-        Promotion promotion= Promotion.NO_PROMOTION;
-        if (dayOfWeek.equals(DayOfWeek.MONDAY) && customer.getCustomerType().equals(CustomerType.PENSIONER)) {
+        List<Promotion> promotions = new ArrayList<>();
+        Promotion promotion;
+        if (dayOfWeek.equals(DayOfWeek.THURSDAY) && customer.getCustomerType().equals(CustomerType.STUDENT)) {
             promotion = Promotion.SALE_FOR_PENSIONER;
+            promotions.add(promotion);
         }
         if (dayOfWeek.equals(DayOfWeek.THURSDAY) && customer.getCustomerType().equals(CustomerType.STUDENT)) {
             promotion = Promotion.SALE_FOR_STUDENT;
+            promotions.add(promotion);
         } else {
+            promotion = Promotion.NO_PROMOTION;
             LOGGER.info("No Promotion this day");
         }
-        return promotion;
+        return promotions;
     }
 
     @Override
