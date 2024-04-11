@@ -24,14 +24,20 @@ public final class CashRegister extends AbstractEntity implements ISelling, IClo
     }
 
 
-    public double calculateSumm(Map<Product, Integer> products) {
-        return products.entrySet().stream().mapToDouble(e -> e.getKey().getPrice() * e.getValue()).sum();
+    public double calculateSumm(Promotion promotion, Map<Product, Integer> products) {
+        double summ = 0;
+        if (promotion == Promotion.NO_PROMOTION) {
+            summ = products.entrySet().stream().mapToDouble(e -> e.getKey().getPrice() * e.getValue()).sum();
+        } else {
+            summ = calculateDiscounts(promotion, products);
+        }
+        return summ;
     }
 
     @Override
-    public Receipt sell(Customer customer) throws SummLessThanZeroException {
+    public Receipt sell(Customer customer, Promotion promotion) throws SummLessThanZeroException {
         salesman.say("Welcome");
-        double summ = calculateSumm(customer.getProductsToBuy());
+        double summ = calculateSumm(promotion, customer.getProductsToBuy());
         if (summ < 0) {
             throw new SummLessThanZeroException("!!!Only Positive Numbers in Summ!!!");
         }
@@ -58,11 +64,10 @@ public final class CashRegister extends AbstractEntity implements ISelling, IClo
         return summOfReceipts;
     }
 
-    public void calculateDiscounts(Promotion promotion, Customer customer) {
-        AtomicReference<String> value = new AtomicReference<>("");
-        customer.getProductsToBuy().keySet().forEach(p -> {
-            p.setPrice(p.getPrice() - p.getPrice() * promotion.getShopDiscount()/100);
-        });
+    public double calculateDiscounts(Promotion promotion, Map<Product, Integer> products) {
+        double summ = products.entrySet().stream().mapToDouble(e -> e.getKey().getPrice() * e.getValue()).sum();
+        double summWithDiscount = summ-summ*promotion.getShopDiscount()/100;
+        return summWithDiscount;
     }
 
     @Override

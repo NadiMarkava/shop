@@ -32,7 +32,6 @@ public class Shop extends AbstractEntity implements ISelling, IReturn, IClose {
     private CustomLinkedList<Salesman> salesmanList;
     private Set<Customer> customerList;
     private List<Provider> providerList;
-    private CashRegister cashRegister;
     private List<CashRegister> cashRegisterList;
     private List<Receipt> receiptList;
 
@@ -88,20 +87,22 @@ public class Shop extends AbstractEntity implements ISelling, IReturn, IClose {
         salesmanList.addAtLast(salesman);
     }
 
-    public void getAvailablePromotions(Customer customer) {
+    public Promotion getAvailablePromotions(Customer customer) {
         DayOfWeek dayOfWeek = DayOfWeek.from(LocalDate.now());
+        Promotion promotion= Promotion.NO_PROMOTION;
         if (dayOfWeek.equals(DayOfWeek.MONDAY) && customer.getCustomerType().equals(CustomerType.PENSIONER)) {
-            cashRegister.calculateDiscounts(Promotion.SALE_FOR_PENSIONER, customer);
+            promotion = Promotion.SALE_FOR_PENSIONER;
         }
-        if (dayOfWeek.equals(DayOfWeek.WEDNESDAY) && customer.getCustomerType().equals(CustomerType.STUDENT)) {
-            cashRegister.calculateDiscounts(Promotion.SALE_FOR_STUDENT, customer);
+        if (dayOfWeek.equals(DayOfWeek.THURSDAY) && customer.getCustomerType().equals(CustomerType.STUDENT)) {
+            promotion = Promotion.SALE_FOR_STUDENT;
         } else {
             LOGGER.info("No Promotion this day");
         }
+        return promotion;
     }
 
     @Override
-    public Receipt sell(Customer customer) throws SummLessThanZeroException {
+    public Receipt sell(Customer customer, Promotion promotion) throws SummLessThanZeroException {
         CashRegister cashRegister = getAvailableCashRegister();
         cashRegister.setBusy(true);
         try {
@@ -110,8 +111,8 @@ public class Shop extends AbstractEntity implements ISelling, IReturn, IClose {
         (ProductNotExistsException e) {
             LOGGER.error("!!!!!No such product in storehouse or wrong quantity!!!!");
         }
-        getAvailablePromotions(customer);
-        Receipt receipt = cashRegister.sell(customer);
+        promotion = getAvailablePromotions(customer);
+        Receipt receipt = cashRegister.sell(customer, promotion);
         addReceipt(receipt);
         cashRegister.setBusy(false);
         storehouse.removeProducts(customer.getProductsToBuy());

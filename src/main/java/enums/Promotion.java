@@ -3,7 +3,8 @@ package enums;
 public enum Promotion {
 
     SALE_FOR_STUDENT("Sale for student", 7),
-    SALE_FOR_PENSIONER("Sale for pensioner", 10);
+    SALE_FOR_PENSIONER("Sale for pensioner", 10),
+    NO_PROMOTION("No any promotion", 0);
 
     private String nameDiscount;
     private double shopDiscount;

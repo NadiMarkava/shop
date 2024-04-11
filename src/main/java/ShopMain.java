@@ -1,6 +1,7 @@
 import enums.CustomerType;
 import enums.Position;
 import enums.ProductCategory;
+import enums.Promotion;
 import exceptions.DiscountCardAlreadyExistsException;
 import exceptions.InvalidInputException;
 import exceptions.SummLessThanZeroException;
@@ -79,7 +80,7 @@ public class ShopMain {
         shop.setCashRegisterList(cashRegisterList);
         shop.setReceiptList(receiptList);
         cashRegister.setBusy(true);
-        Receipt receipt = shop.sell(customer);
+        Receipt receipt = shop.sell(customer, Promotion.NO_PROMOTION);
         LOGGER.info("Receipt" + receipt.toString());
         LOGGER.info("Available Products after selling" + availableProducts);
         shop.returnProducts(receipt);
