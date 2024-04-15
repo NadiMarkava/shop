@@ -20,16 +20,19 @@ public final class CashRegister extends AbstractEntity implements ISelling, IClo
     private final static Logger LOGGER = LogManager.getLogger(CashRegister.class);
     private Salesman salesman;
     private boolean isBusy = false;
-    private static double summOfReceipts = 0;
+    private double summOfReceipts;
 
     public CashRegister(Salesman salesman) {
         this.salesman = salesman;
     }
 
-
     public double calculateSumm(Customer customer) {
         List<Promotion> promotions = getAvailablePromotions(customer);
-        double summ = customer.getProductsToBuy().entrySet().stream().mapToDouble(e -> e.getKey().getPrice() * e.getValue()).sum();
+        double summ = customer.getProductsToBuy()
+                .entrySet()
+                .stream()
+                .mapToDouble(e -> e.getKey().getPrice() * e.getValue())
+                .sum();
         if (!promotions.isEmpty()) {
             summ = calculateDiscounts(promotions, summ);
         }
@@ -62,12 +65,19 @@ public final class CashRegister extends AbstractEntity implements ISelling, IClo
         isBusy = busy;
     }
 
-    public static double getSummOfReceipts() {
+    public void setSummOfReceipts(double summ) {
+        this.summOfReceipts = summ;
+    }
+
+    public double getSummOfReceipts() {
         return summOfReceipts;
     }
 
     public double calculateDiscounts(List<Promotion> promotions, double summ) {
-        summ = summ - summ * promotions.stream().mapToDouble(p -> p.getShopDiscount()).sum() / 100;
+        double discounts = summ * promotions.stream()
+                .mapToDouble(p -> p.getShopDiscount())
+                .sum()/100;
+        summ = summ - discounts;
         return summ;
     }
 
