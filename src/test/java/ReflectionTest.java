@@ -4,7 +4,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.testng.Assert;
 import people.Salesman;
-import shop.*;
+import shop.Shop;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
@@ -22,7 +22,7 @@ public class ReflectionTest {
     public static void main(String[] args)  throws InvalidInputException, NoSuchMethodException, InvocationTargetException, IllegalAccessException {
         Field[] fields = Shop.class.getDeclaredFields();
         Constructor[] constructors = Shop.class.getDeclaredConstructors();
-        Method[] methods = Shop.class.getMethods();
+        Method[] methods = Shop.class.getDeclaredMethods();
         getFieldNamesModifiers(fields);
         getMethodsModifiersParametersReturnTypes(methods);
         getConstructors(constructors);
