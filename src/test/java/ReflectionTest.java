@@ -19,16 +19,19 @@ public class ReflectionTest {
 
     private final static Logger LOGGER = LogManager.getLogger(ReflectionTest.class);
 
-    public static void main(String[] args)  throws InvalidInputException, NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+    public static void main(String[] args) throws InvalidInputException, NoSuchMethodException, InvocationTargetException, IllegalAccessException, InstantiationException {
         Field[] fields = Shop.class.getDeclaredFields();
         Constructor[] constructors = Shop.class.getDeclaredConstructors();
         Method[] methods = Shop.class.getDeclaredMethods();
         getFieldNamesModifiers(fields);
         getMethodsModifiersParametersReturnTypes(methods);
         getConstructors(constructors);
-        Shop shop = new Shop();
-        Salesman salesman = new Salesman("John", "Obermaier", Position.HEAD_SALESMAN, 450);
-        Salesman salesman1 = new Salesman("Sepp", "Herrmann", Position.SALESMAN, 550);
+        Shop shop = Shop.class.getConstructor().newInstance();
+
+        Salesman salesman = Salesman.class.getConstructor(
+                String.class, String.class, Position.class, double.class).newInstance("John","Obermaier",Position.HEAD_SALESMAN, 450);
+        Salesman salesman1 = Salesman.class.getConstructor(
+                String.class, String.class, Position.class, double.class).newInstance("Sepp","Herrmann",Position.SALESMAN, 550);
         List<Salesman> salesmen = new ArrayList<>();
         salesmen.add(salesman);
         salesmen.add(salesman1);
