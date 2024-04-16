@@ -60,12 +60,10 @@ public class Shop extends AbstractEntity implements ISelling, IReturn, IClose {
     }
 
     public CashRegister getAvailableCashRegister() {
-        for (int i = 0; i < cashRegisterList.size(); i++) {
-            if (!cashRegisterList.get(i).isBusy()) {
-                return cashRegisterList.get(i);
-            }
-        }
-        throw new UnsupportedOperationException("No available cash registers");
+        return cashRegisterList.stream()
+                .filter(c -> !c.isBusy())
+                .findFirst()
+                .orElseThrow(() -> new UnsupportedOperationException("No available cash registers"));
     }
 
     public void addCustomer(Customer customer) {
@@ -82,6 +80,18 @@ public class Shop extends AbstractEntity implements ISelling, IReturn, IClose {
 
     public Storehouse getStorehouse() {
         return storehouse;
+    }
+
+    public double salaryСosts(List<Salesman> salesmanList) {
+        return salesmanList.stream()
+                .mapToDouble(Salesman::getSalary)
+                .sum();
+    }
+
+    public double getProfitForDay(List<CashRegister> cashRegisterList) {
+        return cashRegisterList.stream()
+                .mapToDouble(CashRegister::getSummOfReceipts)
+                .sum();
     }
 
     public void hireSalesman(Salesman salesman) {
