@@ -1,12 +1,13 @@
 package people;
 
+import enums.CustomerType;
+import enums.DiscountCard;
 import exceptions.InvalidInputException;
 import interfaces.IPayment;
 import interfaces.IReturn;
 import interfaces.ISpeak;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import shop.DiscountCard;
 import shop.Product;
 import shop.Receipt;
 
@@ -17,6 +18,7 @@ public class Customer extends Person implements IPayment, ISpeak, IReturn {
     private final static Logger LOGGER = LogManager.getLogger(Customer.class);
     private DiscountCard discountCard;
     private Map<Product, Integer> productsToBuy;
+    private CustomerType customerType;
 
     public Customer(String firstName, String lastName) throws InvalidInputException {
         super(firstName, lastName);
@@ -53,6 +55,17 @@ public class Customer extends Person implements IPayment, ISpeak, IReturn {
 
     public void setDiscountCard(DiscountCard discountCard) {
         this.discountCard = discountCard;
+    }
+
+    public CustomerType getCustomerType() {
+        if (customerType == null) {
+            customerType = CustomerType.GENERAL;
+        }
+        return customerType;
+    }
+
+    public void setCustomerType(CustomerType customerType) {
+        this.customerType = customerType;
     }
 
     @Override
@@ -104,7 +117,6 @@ public class Customer extends Person implements IPayment, ISpeak, IReturn {
         return "Customer[" +
                 "First name=" + getFirstName() + ", " +
                 "Last name=" + getLastName() + ", " +
-                "DiscountCard=" + discountCard.getId() + ", " +
                 "Discount=" + discountCard.getDiscount() +
                 ']';
     }

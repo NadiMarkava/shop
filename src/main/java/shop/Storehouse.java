@@ -4,6 +4,8 @@ import exceptions.ProductCannotBeReturnException;
 import exceptions.ProductNotExistsException;
 
 import java.util.Map;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 public class Storehouse {
 
@@ -40,6 +42,10 @@ public class Storehouse {
         return result;
     }
 
+    public Map<Product, Integer> searchProducts(String name) {
+        Predicate<? super Map.Entry<Product, Integer>> condition = p -> p.getKey().getName().equals(name);
+        return availableProducts.entrySet().stream().filter(condition).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+    }
 
     public void addProduct(Product product, int count) {
         availableProducts.merge(product, count, Integer::sum);

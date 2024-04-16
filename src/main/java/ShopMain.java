@@ -1,3 +1,6 @@
+import enums.CustomerType;
+import enums.Position;
+import enums.ProductCategory;
 import exceptions.DiscountCardAlreadyExistsException;
 import exceptions.InvalidInputException;
 import exceptions.SummLessThanZeroException;
@@ -19,12 +22,13 @@ public class ShopMain {
 
     public static void main(String[] args) throws InvalidInputException, SummLessThanZeroException, DiscountCardAlreadyExistsException {
         Shop shop = new Shop();
-        Product product = new Product("Yogurt", 3.45, new ProductCategory("Milk Products"), new Provider("Sofiika"));
-        Product productB = new Product("Ice cream", 1.45, new ProductCategory("Milk Products"), new Provider("Miskays marka"));
-        Product productC = new Product("Prosseco", 13.45, new ProductCategory("Drinks"), new Provider("Italia marka"));
-        Product productD = new Product("oil", 23.45, new ProductCategory("Auto"), new Provider("BMW marka"));
-        Salesman salesman = new Salesman("John", "Obermaier", 450);
-        Salesman salesman1 = new Salesman("Sepp", "Herrmann", 450);
+        Product product = new Product("Yogurt", 7.45, ProductCategory.MILK_PRODUCTS, new Provider("Savushkin"));
+        Product productF = new Product("Yogurt", 3.45, ProductCategory.MILK_PRODUCTS, new Provider("Sofiika"));
+        Product productB = new Product("Ice cream", 1.45, ProductCategory.MILK_PRODUCTS, new Provider("Miskays marka"));
+        Product productC = new Product("Prosseco", 13.45, ProductCategory.DRINKS, new Provider("Italia marka"));
+        Product productD = new Product("oil", 23.45, ProductCategory.AUTO, new Provider("BMW marka"));
+        Salesman salesman = new Salesman("John", "Obermaier", Position.HEAD_SALESMAN, 450);
+        Salesman salesman1 = new Salesman("Sepp", "Herrmann", Position.SALESMAN, 450);
         Customer customer = new Customer("Elisaveta", "Zhuk");
         //Collections
         List<Salesman> salesmanList = new ArrayList<>();
@@ -39,33 +43,35 @@ public class ShopMain {
 
         Storehouse storehouse = new Storehouse();
         shop.setStorehouse(storehouse);
+
         storehouse.setAvailableProducts(availableProducts);
 
         LOGGER.info("Available Products" + availableProducts);
 
+        storehouse.addProduct(productF, 1);
         storehouse.addProduct(productB, 6);
         storehouse.addProduct(productB, 1);
         storehouse.addProduct(product, 6);
         storehouse.addProduct(product, 1);
         storehouse.addProduct(productD, 2);
 
-        LOGGER.info("Available Products" + availableProducts);
+        Map<Product, Integer> productsBySearch = storehouse.searchProducts("Yogurt");
+        productsBySearch.entrySet().stream().forEach(t -> LOGGER.info("Products Yogurt" + t + "\n"));
 
+        LOGGER.info("Available Products" + availableProducts);
         Map<Product, Integer> productsToBuy = new HashMap<>();
         customer.setProductsToBuy(productsToBuy);
         productsToBuy = customer.takeProduct(product, 2);
         customer.takeProduct(productD, 2);
-        customer.takeProduct(productC, 2);
-        shop.createDiscountCard(customer, 5);
-
+        customer.setCustomerType(CustomerType.STUDENT);
+        shop.createDiscountCard(customer);
         LOGGER.info("Products to buy" + productsToBuy);
 
         try {
-            shop.createDiscountCard(customer, 5);
+            shop.createDiscountCard(customer);
         } catch (DiscountCardAlreadyExistsException e) {
             LOGGER.error("!!!!This customer has already discount card!!!" + customer);
         }
-
         CashRegister cashRegister = new CashRegister(salesman);
         CashRegister cashRegister1 = new CashRegister(salesman1);
         cashRegisterList.add(cashRegister);
@@ -74,7 +80,6 @@ public class ShopMain {
         shop.setReceiptList(receiptList);
         cashRegister.setBusy(true);
         Receipt receipt = shop.sell(customer);
-
         LOGGER.info("Receipt" + receipt.toString());
         LOGGER.info("Available Products after selling" + availableProducts);
         shop.returnProducts(receipt);

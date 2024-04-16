@@ -1,6 +1,9 @@
 package shop;
 
 import collections.CustomLinkedList;
+import enums.CustomerType;
+import enums.DiscountCard;
+import enums.Promotion;
 import exceptions.DiscountCardAlreadyExistsException;
 import exceptions.ProductCannotBeReturnException;
 import exceptions.ProductNotExistsException;
@@ -13,6 +16,9 @@ import org.apache.logging.log4j.Logger;
 import people.Customer;
 import people.Salesman;
 
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -27,19 +33,17 @@ public class Shop extends AbstractEntity implements ISelling, IReturn, IClose {
     private CustomLinkedList<Salesman> salesmanList;
     private Set<Customer> customerList;
     private List<Provider> providerList;
-    private CashRegister cashRegister;
     private List<CashRegister> cashRegisterList;
     private List<Receipt> receiptList;
 
     public Shop() {
     }
 
-    public void createDiscountCard(Customer customer, double discount) throws DiscountCardAlreadyExistsException {
+    public void createDiscountCard(Customer customer) throws DiscountCardAlreadyExistsException {
         if (customer.hasDiscountCard()) {
             throw new DiscountCardAlreadyExistsException();
         } else {
-            DiscountCard discountCard = new DiscountCard(discount);
-            customer.setDiscountCard(discountCard);
+            customer.setDiscountCard(DiscountCard.STANDART);
         }
     }
 
@@ -82,6 +86,24 @@ public class Shop extends AbstractEntity implements ISelling, IReturn, IClose {
 
     public void hireSalesman(Salesman salesman) {
         salesmanList.addAtLast(salesman);
+    }
+
+    public static List<Promotion> getAvailablePromotions(Customer customer) {
+        DayOfWeek dayOfWeek = DayOfWeek.from(LocalDate.now());
+        List<Promotion> promotions = new ArrayList<>();
+        Promotion promotion;
+        if (dayOfWeek.equals(DayOfWeek.THURSDAY) && customer.getCustomerType().equals(CustomerType.STUDENT)) {
+            promotion = Promotion.SALE_FOR_PENSIONER;
+            promotions.add(promotion);
+        }
+        if (dayOfWeek.equals(DayOfWeek.THURSDAY) && customer.getCustomerType().equals(CustomerType.STUDENT)) {
+            promotion = Promotion.SALE_FOR_STUDENT;
+            promotions.add(promotion);
+        } else {
+            promotion = Promotion.NO_PROMOTION;
+            LOGGER.info("No Promotion this day");
+        }
+        return promotions;
     }
 
     @Override

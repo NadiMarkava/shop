@@ -1,5 +1,6 @@
 package shop;
 
+import enums.Promotion;
 import exceptions.SummLessThanZeroException;
 import interfaces.IClose;
 import interfaces.ISelling;
@@ -8,7 +9,11 @@ import org.apache.logging.log4j.Logger;
 import people.Customer;
 import people.Salesman;
 
+import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicReference;
+
+import static shop.Shop.getAvailablePromotions;
 
 public final class CashRegister extends AbstractEntity implements ISelling, IClose {
 
@@ -21,10 +26,12 @@ public final class CashRegister extends AbstractEntity implements ISelling, IClo
         this.salesman = salesman;
     }
 
-    public double calculateSumm(Map<Product, Integer> products) {
-        double summ = 0;
-        for (Product product : products.keySet()) {
-            summ += product.getPrice() * products.get(product);
+
+    public double calculateSumm(Customer customer) {
+        List<Promotion> promotions = getAvailablePromotions(customer);
+        double summ = customer.getProductsToBuy().entrySet().stream().mapToDouble(e -> e.getKey().getPrice() * e.getValue()).sum();
+        if (!promotions.isEmpty()) {
+            summ = calculateDiscounts(promotions, summ);
         }
         return summ;
     }
@@ -32,7 +39,7 @@ public final class CashRegister extends AbstractEntity implements ISelling, IClo
     @Override
     public Receipt sell(Customer customer) throws SummLessThanZeroException {
         salesman.say("Welcome");
-        double summ = calculateSumm(customer.getProductsToBuy());
+        double summ = calculateSumm(customer);
         if (summ < 0) {
             throw new SummLessThanZeroException("!!!Only Positive Numbers in Summ!!!");
         }
@@ -57,6 +64,11 @@ public final class CashRegister extends AbstractEntity implements ISelling, IClo
 
     public static double getSummOfReceipts() {
         return summOfReceipts;
+    }
+
+    public double calculateDiscounts(List<Promotion> promotions, double summ) {
+        summ = summ - summ * promotions.stream().mapToDouble(p -> p.getShopDiscount()).sum() / 100;
+        return summ;
     }
 
     @Override
