@@ -55,7 +55,7 @@ public class ShopMain {
         storehouse.addProduct(product, 1);
         storehouse.addProduct(productD, 2);
 
-        Map<Product, Integer> productsBySearch = storehouse.searchProducts("Yogurt");
+        Map<Product, Integer> productsBySearch = storehouse.filterProductsByName("Yogurt");
         productsBySearch.entrySet().stream().forEach(t -> LOGGER.info("Products Yogurt" + t + "\n"));
 
         LOGGER.info("Available Products" + availableProducts);
