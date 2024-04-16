@@ -11,7 +11,6 @@ import org.apache.logging.log4j.Logger;
 import shop.Product;
 import shop.Receipt;
 
-import java.util.Comparator;
 import java.util.Map;
 
 public class Customer extends Person implements IPayment, ISpeak, IReturn {
@@ -67,14 +66,6 @@ public class Customer extends Person implements IPayment, ISpeak, IReturn {
 
     public void setCustomerType(CustomerType customerType) {
         this.customerType = customerType;
-    }
-
-    public Product findCheapestProduct(Map<Product, Integer> products, String name) {
-        return products.keySet()
-                .stream()
-                .filter(p->p.getName().contains(name))
-                .min(Comparator.comparingDouble(Product::getPrice))
-                .get();
     }
 
     @Override

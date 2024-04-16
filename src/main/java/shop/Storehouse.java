@@ -42,26 +42,9 @@ public class Storehouse {
         return result;
     }
 
-    public Map<Product, Integer> filterProductsByName(String name) {
-        Predicate<? super Map.Entry<Product, Integer>> condition = p -> p.getKey().getName().contains(name);
-        return availableProducts.entrySet()
-                .stream()
-                .filter(condition)
-                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
-    }
-
-    public Map<Product, Integer> filterProductsByProvider(Provider provider) {
-        return availableProducts.entrySet()
-                .stream()
-                .filter(p -> p.getKey().getProviders().equals(provider))
-                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
-    }
-
-    public void increasePrice(Map<Product, Integer> products, double value) {
-        products.keySet()
-                .forEach(p -> {
-                    p.setPrice(p.getPrice() * value);
-                });
+    public Map<Product, Integer> searchProducts(String name) {
+        Predicate<? super Map.Entry<Product, Integer>> condition = p -> p.getKey().getName().equals(name);
+        return availableProducts.entrySet().stream().filter(condition).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
     }
 
     public void addProduct(Product product, int count) {

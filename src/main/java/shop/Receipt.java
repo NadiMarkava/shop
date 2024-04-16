@@ -51,10 +51,7 @@ public class Receipt extends AbstractEntity {
     }
 
     public <T extends Product, K> double getSumm(Map<T, K> productList) {
-        return productList.keySet()
-                .stream()
-                .mapToDouble(product -> product.getPrice())
-                .sum();
+        return productList.keySet().stream().mapToDouble(product -> product.getPrice()).sum();
     }
 
     @Override
@@ -84,11 +81,6 @@ public class Receipt extends AbstractEntity {
 
     @Override
     public String toString() {
-        return "Receipt [ " + getDate() + ", Salesman=" + getSalesman().getLastName() + ", Customer=" + getCustomer().getLastName()
-                + ", Products=" + getProductList().keySet()
-                .stream()
-                .flatMap(p -> Stream.of(p.getName(), p.getPrice()))
-                .toList()
-                + ", SUMM=" + getSumm();
+        return "Receipt [ " + getDate() + ", Salesman=" + getSalesman().getLastName() + ", Customer=" + getCustomer().getLastName() + ", Products=" + getProductList().keySet().stream().flatMap(p -> Stream.of(p.getName(), p.getPrice())).collect(Collectors.toList()) + ", SUMM=" + getSumm();
     }
 }
